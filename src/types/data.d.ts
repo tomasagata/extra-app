@@ -115,8 +115,8 @@ declare interface PasswordResetRequest {
 // ***********************************
 
 declare type Category = string;
-declare interface CategoryWithIcon {
-  category: Category,
+declare interface CategoryDTO {
+  name: Category,
   iconId: string
 };
 

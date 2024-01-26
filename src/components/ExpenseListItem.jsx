@@ -37,10 +37,10 @@ const ExpenseListItem = ({data, onEdit, onDelete}) => {
         } } />
     )}
   >
-    <Icon name={iconFactory(data.iconId)} type="entypo" />
+    <Icon name={iconFactory(data.category.iconId)} type="entypo" />
     <ListItem.Content>
       <ListItem.Title style={{ fontSize: 17 }} numberOfLines={1}>{data.concept}</ListItem.Title>
-      <ListItem.Subtitle style={{ fontSize: 13 }} numberOfLines={1}>{data.category}</ListItem.Subtitle>
+      <ListItem.Subtitle style={{ fontSize: 13 }} numberOfLines={1}>{data.category.name}</ListItem.Subtitle>
     </ListItem.Content>
     <ListItem.Content right>
       <ListItem.Title right numberOfLines={1}>{data.amount}</ListItem.Title>

@@ -6,7 +6,7 @@ import DatePicker from 'react-native-date-picker';
 import ScreenTemplate from '../components/ScreenTemplate';
 import { AppInput } from '../components/AppInput';
 import BudgetFilledMeter from '../components/BudgetFilledMeter';
-import { useEditExpenseForm } from '../hooks/expenses';
+import { useEditExpenseForm } from '../hooks/transactions';
 import { useActiveBudgetByDateAndCategory } from '../hooks/budgets';
 
 const iconFactory = (id) => {
@@ -56,7 +56,7 @@ const ModifyExpenseScreen = ({navigation, route}) => {
       concept,
       amount,
       date: date.toISOString().substring(0, 10),
-      category: route.params.selectedCategory.category,
+      category: route.params.selectedCategory.category.name,
       iconId: route.params.selectedCategory.iconId
     };
 
@@ -101,9 +101,9 @@ const ModifyExpenseScreen = ({navigation, route}) => {
 
         <Text>Category</Text>
         <ListItem containerStyle={{marginBottom: 20}}>
-          <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
+          <Icon name={iconFactory(route.params.selectedCategory.category.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.category.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         

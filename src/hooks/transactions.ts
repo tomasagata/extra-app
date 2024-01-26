@@ -3,7 +3,7 @@ import { deleteFromApi, getFromApi, postToApi } from "../utils/fetching";
 import { Alert } from "react-native";
 import SessionExpiredError from "../errors/SessionExpiredError";
 import { useAuthentication } from "./authentication";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -41,31 +41,62 @@ function submitEditedExpense({budgetId, request}: {budgetId: string, request: Ex
   });
 };
 
-function getExpenseList({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<Expense[]> {
+function getTransactionList({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<Expense[]> {
   const [, categories, from, until] = queryKey;
-  const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
+  // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
   const iso_from_date = from ? from.toISOString().substring(0,10) : "";
   const iso_until_date = until ? until.toISOString().substring(0,10) : "";
 
-  return getFromApi(`/getMyExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
+  // return getFromApi(`/getMyExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
+  return postToApi("/getMyExpenses", {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      categories,
+      from: iso_from_date,
+      until: iso_until_date
+    })
+  });
+
 }
 
 function getSumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<{category: Category, amount: string}[]> {
   const [, categories, from, until] = queryKey;
-  const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
+  // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
   const iso_from_date = from ? from.toISOString().substring(0,10) : "";
   const iso_until_date = until ? until.toISOString().substring(0,10) : "";
 
-  return getFromApi(`/getSumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
+  // return getFromApi(`/getSumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
+  return postToApi("/getSumOfExpenses", {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      categories,
+      from: iso_from_date,
+      until: iso_until_date
+    })
+  });
 }
 
 function getYearlySumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<{year: string, amount: string}[]> {
   const [, categories, from, until] = queryKey;
-  const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
+  // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
   const iso_from_date = from ? from.toISOString().substring(0,10) : "";
   const iso_until_date = until ? until.toISOString().substring(0,10) : "";
 
-  return getFromApi(`/getYearlySumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
+  // return getFromApi(`/getYearlySumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
+  return postToApi("/getYearlySumOfExpenses", {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      categories,
+      from: iso_from_date,
+      until: iso_until_date
+    })
+  });
 }
 
 
@@ -240,11 +271,11 @@ export function useEditExpenseForm() {
   return mutation;
 }
 
-export function useExpenseList(request: { categories?: string[], from?: Date, until?: Date }) {
+export function useTransactionList(request: { categories?: string[], from?: Date, until?: Date }) {
   const { sessionExpired } = useAuthentication();
   const query = useQuery({ 
     queryKey: ['getExpenses', request?.categories, request?.from, request?.until], 
-    queryFn: getExpenseList,
+    queryFn: getTransactionList,
     retry: false
   });
 

@@ -37,7 +37,7 @@ function submitBudget(request: BudgetCreationRequest): Promise<ApiResponse> {
   });
 };
 
-function getActiveBudgetByDateAndCategory({ queryKey }: QueryFunctionContext<[string, string, string]>): Promise<Budget | null> {
+function getActiveBudgetByDateAndCategory({ queryKey }: QueryFunctionContext<[string, string, CategoryDTO]>): Promise<Budget | null> {
   const [, date, category] = queryKey;
   return postToApi("/getActiveBudgets", {
     credentials: "include",
@@ -172,10 +172,10 @@ export function useBudgetCreationForm() {
   return mutation;
 }
 
-export function useActiveBudgetByDateAndCategory(date: string, category: string) {
+export function useActiveBudgetByDateAndCategory(date: string, category: CategoryDTO) {
   const { sessionExpired } = useAuthentication();
   const query = useQuery({ 
-    queryKey: ['getActiveBudgets', date, category], 
+    queryKey: ['getActiveBudgets', date, category], // TODO: This NEEDS TO CHANGE! ADD CategoryIconId
     queryFn: getActiveBudgetByDateAndCategory,
     retry: false
   });

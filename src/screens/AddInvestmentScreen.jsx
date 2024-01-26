@@ -31,7 +31,7 @@ const iconFactory = (id) => {
 };
 
 
-const AddBudgetScreen = ({navigation, route}) => {
+const AddInvestmentScreen = ({navigation, route}) => {
   const [name, setName] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [startDate, setStartDate] = React.useState(new Date());
@@ -54,11 +54,9 @@ const AddBudgetScreen = ({navigation, route}) => {
     let newBudget = {
       name, 
       limitAmount: amount, 
-      // ...(route.params.selectedCategory), 
+      ...(route.params.selectedCategory), 
       startingDate: startDate, 
-      limitDate: endDate,
-      category: route.params.selectedCategory.name,
-      iconId: route.params.selectedCategory.iconId
+      limitDate: endDate
     };
 
     sendForm(newBudget);
@@ -102,9 +100,9 @@ const AddBudgetScreen = ({navigation, route}) => {
 
         <Text>Category</Text>
         <ListItem containerStyle={{marginBottom: 20}}>
-          <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
+          <Icon name={iconFactory(route.params.selectedCategory.category.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.name}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.category.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         
@@ -209,4 +207,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddBudgetScreen;
+export default AddInvestmentScreen;

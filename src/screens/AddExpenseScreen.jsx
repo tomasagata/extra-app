@@ -7,7 +7,7 @@ import ScreenTemplate from '../components/ScreenTemplate';
 import { AppInput } from '../components/AppInput';
 import BudgetFilledMeter from '../components/BudgetFilledMeter';
 import { useActiveBudgetByDateAndCategory } from '../hooks/budgets';
-import { useExpenseCreationForm } from '../hooks/expenses';
+import { useExpenseCreationForm } from '../hooks/transactions';
 
 const iconFactory = (id) => {
   switch (id) {
@@ -44,7 +44,7 @@ const AddExpenseScreen = ({navigation, route}) => {
   
   // if budget === null, that means there's no budget for selected date.
   // if budget === undefined, that means it's still fetching from api.
-  const { isPending: isPendingActiveBudgets , data: activeBudget } = useActiveBudgetByDateAndCategory(date, route.params.selectedCategory.category);
+  const { isPending: isPendingActiveBudgets , data: activeBudget } = useActiveBudgetByDateAndCategory(date, route.params.selectedCategory);
   const { isPending: isPendingForm , mutate: sendForm } = useExpenseCreationForm();
 
   const loading = isPendingActiveBudgets || isPendingForm;
@@ -58,7 +58,7 @@ const AddExpenseScreen = ({navigation, route}) => {
       concept,
       amount,
       date: date.toISOString().substring(0, 10),
-      category: route.params.selectedCategory.category,
+      category: route.params.selectedCategory.name,
       iconId: route.params.selectedCategory.iconId
     };
 
@@ -105,7 +105,7 @@ const AddExpenseScreen = ({navigation, route}) => {
         <ListItem containerStyle={{marginBottom: 20}}>
           <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         

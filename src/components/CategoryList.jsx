@@ -34,9 +34,9 @@ const CategoryList = ({ onAdd, onSelection, selectedCategory }) => {
           key={index}
           onPress={() => onSelection(category)}
           iconId={category.iconId}
-          categoryName={category.category}
+          categoryName={category.name}
           selected={
-            selectedCategory?.category == category.category && 
+            selectedCategory?.name == category.name && 
             selectedCategory?.iconId == category.iconId
           } 
         />

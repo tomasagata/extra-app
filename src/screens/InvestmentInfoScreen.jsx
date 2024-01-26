@@ -29,7 +29,7 @@ const iconFactory = (id) => {
   }
 };
 
-const BudgetInfoScreen = ({navigation, route}) => {
+const InvestmentInfoScreen = ({navigation, route}) => {
 
   const handleBack = async () => {
     navigation.goBack();
@@ -123,4 +123,4 @@ const BudgetInfoScreen = ({navigation, route}) => {
   );
 };
 
-export default BudgetInfoScreen;
+export default InvestmentInfoScreen;

@@ -5,7 +5,7 @@ import { BarChart } from 'react-native-chart-kit';
 import { ListItem } from '@rneui/themed';
 
 import ScreenTemplate from '../components/ScreenTemplate';
-import { useYearlySumOfExpenses } from '../hooks/expenses';
+import { useYearlySumOfExpenses } from '../hooks/transactions';
 import FilterButton from '../components/Filter';
 
 

@@ -31,10 +31,10 @@ const BudgetList = ({ onAdd, onSelection }) => {
 
       {budgets?.map((budget, index) => (
         <ListItem key={index} bottomDivider onPress={() => onSelection(budget)}>
-          <Icon name={iconFactory(budget.iconId)} type="entypo" />
+          <Icon name={iconFactory(budget.category.iconId)} type="entypo" />
           <ListItem.Content>
             <ListItem.Title>{budget.name}</ListItem.Title>
-            <ListItem.Subtitle>{budget.category}</ListItem.Subtitle>
+            <ListItem.Subtitle>{budget.category.name}</ListItem.Subtitle>
           </ListItem.Content>
           <ListItem.Chevron />
         </ListItem>

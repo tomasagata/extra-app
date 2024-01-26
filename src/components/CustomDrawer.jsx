@@ -12,7 +12,7 @@ const CustomDrawer = props => {
     <View style={{flex: 1}}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{backgroundColor: '#E86DC3'}}>
+        contentContainerStyle={{backgroundColor: '#E86DC3', overflow: 'hidden'}}>
         <ImageBackground
           source={require('../../img/menu-bg.jpeg')}
           style={{padding: 20}}>

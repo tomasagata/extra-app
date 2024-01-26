@@ -5,7 +5,7 @@ import { Avatar, Icon, ListItem } from '@rneui/themed';
 
 import { colorGradientSample } from '../utils/colors';
 import ScreenTemplate from '../components/ScreenTemplate';
-import { useSumOfExpenses } from '../hooks/expenses';
+import { useSumOfExpenses } from '../hooks/transactions';
 import FilterButton from '../components/Filter';
 
 

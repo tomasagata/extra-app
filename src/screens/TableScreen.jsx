@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
 
 import ScreenTemplate from '../components/ScreenTemplate';
-import { useDeleteExpense, useExpenseList } from '../hooks/expenses';
+import { useDeleteExpense, useTransactionList } from '../hooks/transactions';
 import FilterButton from '../components/Filter';
 import ExpenseListItem from '../components/ExpenseListItem';
 import AddExpenseButton from '../components/AddExpenseButton';
@@ -11,7 +11,7 @@ import AddExpenseButton from '../components/AddExpenseButton';
 const TableScreen = ({navigation, route}) => {
   const [ filterData, setFilterData ] = useState({});
 
-  const { isPending: isPendingExpenses, data: expenses, isRefetching, refetch } = useExpenseList(filterData);
+  const { isPending: isPendingExpenses, data: expenses, isRefetching, refetch } = useTransactionList(filterData);
   const { isPending: isPendingDelete, mutate: deleteExpense } = useDeleteExpense();
   const loading = isPendingExpenses || isPendingDelete;
 
@@ -19,7 +19,7 @@ const TableScreen = ({navigation, route}) => {
     navigation.navigate("Add Expense", {
       screen: "expense-modify/categories-list",
       params: {
-        selectedCategory: {category: item.category, iconId: item.iconId},
+        selectedCategory: item.category,
         selectedItem: item
       },
     });

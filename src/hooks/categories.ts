@@ -21,7 +21,7 @@ function getUserCategories({ queryKey }: QueryFunctionContext<[string]>): Promis
   return getFromApi("/getAllCategories");
 }
 
-function getUserCategoriesWithIcons({ queryKey }: QueryFunctionContext<[string]>): Promise<CategoryWithIcon[]> {
+function getUserCategoriesWithIcons({ queryKey }: QueryFunctionContext<[string]>): Promise<CategoryDTO[]> {
   return getFromApi("/getAllCategoriesWithIcons");
 }
 

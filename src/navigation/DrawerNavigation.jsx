@@ -12,6 +12,7 @@ import LoginScreen from '../screens/LoginScreen';
 import BudgetStack from '../navigation/BudgetStack';
 import ExpenseStack from '../navigation/ExpenseStack';
 import { useAuthentication } from '../hooks/authentication';
+import InvestmentStack from './InvestmentStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -101,6 +102,16 @@ export const DrawerNavigation = (props) => {
             drawerIcon: ({color}) => (
               <Ionicons name="cash-outline" size={22} color={color} />
             ),
+          }}
+        />
+        <Drawer.Screen
+          name="Investments" 
+          component={InvestmentStack}
+          options={{
+            title: "Investments",
+            drawerIcon: ({color}) => (
+              <Ionicons name='business-outline' size={22} color={color} />
+            )
           }}
         />
         <Drawer.Screen 
