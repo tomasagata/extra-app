@@ -163,13 +163,18 @@ export function useNotifications() {
   }, []);
 
   const register = useCallback(() => {
-    initRegisterFlow().catch((registerError: NotificationsRegistrationError) => {
+    initRegisterFlow().then(() => {
+      console.log("Notifications: registered successfully");
+    }).catch((registerError: NotificationsRegistrationError) => {
+      areNotificationsAllowed();
       console.error(registerError);
     });
   }, [initRegisterFlow]);
 
   const deregister = useCallback(() => {
-    initDeregisterFlow().catch((registerError: NotificationsRegistrationError) => {
+    initDeregisterFlow().then(() => {
+      console.log("Notifications: deregistered successfully");
+    }).catch((registerError: NotificationsRegistrationError) => {
       console.error(registerError);
     });
   }, [initDeregisterFlow]);
