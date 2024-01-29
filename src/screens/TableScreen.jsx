@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, Text } from 'react-native';
 
 import ScreenTemplate from '../components/ScreenTemplate';
 import { useDeleteExpense, useTransactionList } from '../hooks/transactions';

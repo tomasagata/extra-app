@@ -3,18 +3,18 @@ import { Text } from "react-native";
 
 import ScreenTemplate from "../components/ScreenTemplate";
 import BackButton from "../components/BackButton";
-import BudgetList from "../components/BudgetList";
+import InvestmentList from "../components/InvestmentList";
 
 
 const InvestmentsScreen = ({navigation, route}) => {
 
-  const handleBudgetSelection = (budget) => {
+  const handleInvestmentSelection = (investment) => {
     navigation.navigate("investment-info", {
-      selectedBudget: budget
+      selectedInvestment: investment
     });
   };
 
-  const handleAddBudget = () => {
+  const handleAddInvestment = () => {
     navigation.navigate("investment-add/categories-list");
   };
 
@@ -31,11 +31,11 @@ const InvestmentsScreen = ({navigation, route}) => {
           color: '#333',
           marginBottom: 30,
           marginTop: 30,
-        }}>Budgets</Text>
+        }}>Investments</Text>
 
-        <BudgetList 
-          onAdd={handleAddBudget}
-          onSelection={handleBudgetSelection}
+        <InvestmentList 
+          onAdd={handleAddInvestment}
+          onSelection={handleInvestmentSelection}
         />
 
         <BackButton />

@@ -4,9 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { doLogout, verifyCredentials, doSignIn } from "../utils/apiFetch";
 import { AuthContext } from "./AuthContext";
+import { useNotifications } from "../hooks/notifications";
 
 
 export const AuthenticationProvider = ({ children }) => {
+  const {register, deregister} = useNotifications();
+
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -76,6 +79,7 @@ export const AuthenticationProvider = ({ children }) => {
         case("2xx"):
           await AsyncStorage.setItem("userCredentials", JSON.stringify(credentials));
           dispatch({ type: 'SIGN_IN', userCredentials: credentials });
+          register();
           break;
         case("4xx"):
           Alert.alert("Invalid credentials", "Check fields and try again.");
@@ -94,6 +98,7 @@ export const AuthenticationProvider = ({ children }) => {
         case("2xx"):
           await AsyncStorage.removeItem("userCredentials");
           dispatch({ type: 'SIGN_OUT' });
+          deregister();
           break;
         case("4xx"):
           await AsyncStorage.removeItem("userCredentials");
@@ -107,9 +112,10 @@ export const AuthenticationProvider = ({ children }) => {
     sessionExpired: async () => {
       await AsyncStorage.removeItem("userCredentials");
       dispatch({ type: "SIGN_OUT" });
+      deregister();
     },
     ...state
-  }), [state]);
+  }), [state, register, deregister]);
 
   return (
     <AuthContext.Provider value={authContext}>

@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthenticationProvider } from './context/AuthenticationProvider';
 import { DrawerNavigation } from './navigation/DrawerNavigation';
+import { useNotificationHandler } from './hooks/notifications';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const linking = {
 
 
 const App = () => {
+  useNotificationHandler();
 
   return (
     <AuthenticationProvider>

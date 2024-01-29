@@ -42,7 +42,6 @@ export function useUserCategories() {
   const query = useQuery({
     queryKey: ["getAllCategories"],
     queryFn: getUserCategories,
-    placeholderData: [],
     retry: false
   });
 

@@ -78,6 +78,40 @@ declare interface BudgetCreationRequest {
 
 // ***********************************
 //
+//  Investments
+//
+// ***********************************
+
+declare interface InvestmentDTO {
+  id: string,
+  name: string, 
+  downPaymentAmount: string;
+  downPaymentTimestamp: string;
+  depositAmount: string;
+  maxNumberOfDeposits: number;
+  depositIntervalInDays: number;
+  category: CategoryDTO;
+};
+
+declare interface InvestmentAddingRequest {
+  name: string, 
+  downPaymentAmount: string;
+  downPaymentTimestamp: string;
+  depositAmount: string;
+  maxNumberOfDeposits: number;
+  depositIntervalInDays: number;
+  category: string;
+  iconId: string;
+};
+
+
+
+
+
+
+
+// ***********************************
+//
 //  Authentication
 //
 // ***********************************
@@ -117,7 +151,42 @@ declare interface PasswordResetRequest {
 declare type Category = string;
 declare interface CategoryDTO {
   name: Category,
-  iconId: string
+  iconId: Icon
+};
+
+declare enum Icon {
+  AIRPLANE = 1,
+  DRINK = 2,
+  KEY = 3,
+  SHOPPING_CART = 4,
+  CLAPPERBOARD = 5,
+  CROSS = 6,
+  MAN = 7,
+  BOOK = 8,
+  DOLLAR = 9
+}
+
+declare function iconFactory(iconId: Icon) {
+  switch (id) {
+    case 1:
+      return "aircraft"
+    case 2:
+      return "drink"
+    case 3:
+      return "key"
+    case 4:
+      return "shopping-cart"
+    case 5:
+      return "clapperboard"
+    case 6:
+      return "squared-plus"
+    case 7:
+      return "man"
+    case 8:
+      return "open-book"
+    default:
+      return "credit"
+  }
 };
 
 

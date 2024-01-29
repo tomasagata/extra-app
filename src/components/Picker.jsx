@@ -162,7 +162,7 @@ const PickerTextMultiple = (props) => {
             style={defaultStyles.scrollviewStyle}
           >
             
-            {props.data.map((item, index) => (
+            {props.data?.map((item, index) => (
               <PickerItem 
                 key={index}
                 onPress={() => handleItemSelection(item)}

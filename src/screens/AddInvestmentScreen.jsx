@@ -5,7 +5,7 @@ import DatePicker from 'react-native-date-picker';
 
 import ScreenTemplate from '../components/ScreenTemplate';
 import { AppInput } from '../components/AppInput';
-import { useBudgetCreationForm } from '../hooks/budgets';
+import { useInvestmentCreationForm } from '../hooks/investments';
 
 const iconFactory = (id) => {
   switch (id) {
@@ -33,17 +33,19 @@ const iconFactory = (id) => {
 
 const AddInvestmentScreen = ({navigation, route}) => {
   const [name, setName] = React.useState("");
-  const [amount, setAmount] = React.useState("");
-  const [startDate, setStartDate] = React.useState(new Date());
-  const [endDate, setEndDate] = React.useState(new Date());
-  
+  const [downPaymentAmount, setDownPaymentAmount] = React.useState("");
+  const [downPaymentTimestamp, setDownPaymentTimestamp] = React.useState(new Date());
+  const [depositAmount, setDepositAmount] = React.useState("");
+  const [maxNumberOfDeposits, setMaxNumberOfDeposits] = React.useState("");
+  const [depositIntervalInDays, setDepositIntervalInDays] = React.useState("");
+
+
   const [nameHasError, setNameError] = React.useState(false);
   const [amountHasError, setAmountError] = React.useState(false);
 
   const [startDateOpen, setStartDateOpen] = React.useState(false);
-  const [endDateOpen, setEndDateOpen] = React.useState(false);
   
-  const { isPending: loading, mutate: sendForm } = useBudgetCreationForm();
+  const { isPending: loading, mutate: sendForm } = useInvestmentCreationForm();
 
 
   const handleSubmit = async () => {
@@ -51,15 +53,18 @@ const AddInvestmentScreen = ({navigation, route}) => {
       Alert.alert("Validation error", "Please correct selected fields and try again.");
       return;
     }
-    let newBudget = {
+    let newInvestment = {
       name, 
-      limitAmount: amount, 
-      ...(route.params.selectedCategory), 
-      startingDate: startDate, 
-      limitDate: endDate
+      downPaymentAmount,
+      downPaymentTimestamp,
+      depositAmount,
+      maxNumberOfDeposits,
+      depositIntervalInDays,
+      category: route.params.selectedCategory.name,
+      iconId: route.params.selectedCategory.iconId
     };
 
-    sendForm(newBudget);
+    sendForm(newInvestment);
   };
 
   const handleBack = async () => {
@@ -81,7 +86,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
 
   const checkAmountError = () => {
     let regex = /^[\d]{1,12}((\.)(\d){1,2})?$/;
-    let isValid = regex.test(amount);
+    let isValid = regex.test(downPaymentAmount);
     setAmountError(!isValid);
     return !isValid;
   };
@@ -96,13 +101,13 @@ const AddInvestmentScreen = ({navigation, route}) => {
           color: '#333',
           marginBottom: 30,
           marginTop: 30,
-        }}>Create budget</Text>
+        }}>Create Investment</Text>
 
         <Text>Category</Text>
         <ListItem containerStyle={{marginBottom: 20}}>
-          <Icon name={iconFactory(route.params.selectedCategory.category.iconId)} type="entypo" />
+          <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category.name}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         
@@ -114,55 +119,56 @@ const AddInvestmentScreen = ({navigation, route}) => {
           onEndEditing={checkNameError}
         />
 
-        <Text>Budget Max</Text>
+        <Text>Down Payment Amount</Text>
         <AppInput.Amount
-          value={amount}
-          onChangeText={setAmount}
+          value={downPaymentAmount}
+          onChangeText={setDownPaymentAmount}
           errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
           onEndEditing={checkAmountError}
         />
 
         <Text>Starting date</Text>
         <AppInput.Date
-          value={startDate}
+          value={downPaymentTimestamp}
           onPress={() => setStartDateOpen(true)}
+        />
+
+        <Text>Deposit Amount</Text>
+        <AppInput.Amount
+          value={depositAmount}
+          onChangeText={setDepositAmount}
+          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
+          onEndEditing={checkAmountError}
+        />
+
+        <Text>Number of deposits</Text>
+        <AppInput.Amount
+          value={maxNumberOfDeposits}
+          onChangeText={setMaxNumberOfDeposits}
+          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
+          onEndEditing={checkAmountError}
+        />
+
+        <Text>Deposit interval (days)</Text>
+        <AppInput.Amount
+          value={depositIntervalInDays}
+          onChangeText={setDepositIntervalInDays}
+          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
+          onEndEditing={checkAmountError}
         />
 
         <DatePicker
           modal
           mode="date"
           open={startDateOpen}
-          date={startDate}
+          date={downPaymentTimestamp}
           onConfirm={(selectedDate) => {
             setStartDateOpen(false);
-            setStartDate(selectedDate);
+            setDownPaymentTimestamp(selectedDate);
           }}
           onCancel={() => {
             setStartDateOpen(false);
           }}
-          maximumDate={endDate}
-          minimumDate={new Date()}
-        />
-
-        <Text>Ending date</Text>
-        <AppInput.Date
-          value={endDate}
-          onPress={() => setEndDateOpen(true)}
-        />
-        
-        <DatePicker
-          modal
-          mode="date"
-          open={endDateOpen}
-          date={endDate}
-          onConfirm={(selectedDate) => {
-            setEndDateOpen(false);
-            setEndDate(selectedDate);
-          }}
-          onCancel={() => {
-            setEndDateOpen(false);
-          }}
-          minimumDate={startDate}
         />
 
         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>

@@ -47,13 +47,13 @@ const InvestmentInfoScreen = ({navigation, route}) => {
           color: '#333',
           marginBottom: 30,
           marginTop: 30,
-          }}>{route.params.selectedBudget.name}</Text>
+          }}>{route.params.selectedInvestment.name}</Text>
 
           <Text>Category</Text>
           <ListItem>
-              <Icon name={iconFactory(route.params.selectedBudget.category.iconId)} type="entypo" />
+              <Icon name={iconFactory(route.params.selectedInvestment.category.iconId)} type="entypo" />
               <ListItem.Content>
-                  <ListItem.Title>{route.params.selectedBudget.category.name}</ListItem.Title>
+                  <ListItem.Title>{route.params.selectedInvestment.category.name}</ListItem.Title>
               </ListItem.Content>
           </ListItem>
 
@@ -61,49 +61,33 @@ const InvestmentInfoScreen = ({navigation, route}) => {
           <ListItem>
               <Icon name="arrow-expand-right" type="material-community" />
               <ListItem.Content>
-                  <ListItem.Title>{route.params.selectedBudget.creationDate}</ListItem.Title>
+                  <ListItem.Title>{route.params.selectedInvestment.downPaymentTimestamp.toLocaleString()}</ListItem.Title>
               </ListItem.Content>
           </ListItem>
 
-          <Text>Ending date</Text>
-          <ListItem>
-              <Icon name="arrow-expand-left" type="material-community" />
-              <ListItem.Content>
-                  <ListItem.Title>{route.params.selectedBudget.limitDate}</ListItem.Title>
-              </ListItem.Content>
-          </ListItem>
-
-          <Text>Budget amount</Text>
+          <Text>Down payment amount</Text>
           <ListItem>
               <Icon name="credit" type="entypo" />
               <ListItem.Content>
-                  <ListItem.Title>{route.params.selectedBudget.limitAmount}</ListItem.Title>
+                  <ListItem.Title>{route.params.selectedInvestment.downPaymentAmount}</ListItem.Title>
               </ListItem.Content>
           </ListItem>
 
-          <Text>Amount spent</Text>
+          <Text>Deposit amount</Text>
           <ListItem>
             <Icon name="credit" type="entypo" />
             <ListItem.Content>
-              <ListItem.Title>{route.params.selectedBudget.currentAmount}</ListItem.Title>
+              <ListItem.Title>{route.params.selectedInvestment.depositAmount}</ListItem.Title>
             </ListItem.Content>
           </ListItem>
 
-          <ProgressChart 
-            data={{
-              labels: ["Spent"], // optional
-              data: [parseFloat(route.params.selectedBudget.currentAmount) / parseFloat(route.params.selectedBudget.limitAmount)]
-            }}
-            width={330}
-            height={150}
-            radius={50}
-            chartConfig={{
-              color: (opacity = 1) => `rgba(232, 109, 195, ${opacity})`,
-              backgroundGradientFrom: "#ffffff",
-              backgroundGradientTo: "#ffffff",
-            }}
-            hideLegend={true}
-          />
+          <Text>Deposit interval</Text>
+          <ListItem>
+            <Icon name="credit" type="entypo" />
+            <ListItem.Content>
+              <ListItem.Title>{route.params.selectedInvestment.depositIntervalInDays + " days"}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
 
           <TouchableOpacity style={{
             backgroundColor: 'grey',
