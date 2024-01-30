@@ -107,12 +107,13 @@ export const DrawerNavigation = (props) => {
         <Drawer.Screen
           name="Investments" 
           component={InvestmentStack}
-          options={{
+          options={({navigation, route}) => ({
             title: "Investments",
             drawerIcon: ({color}) => (
               <Ionicons name='business-outline' size={22} color={color} />
-            )
-          }}
+            ),
+            swipeEnabled: route.name != 'investment-chart'
+          })}
         />
         <Drawer.Screen 
           name='Add Expense'

@@ -100,13 +100,26 @@ function deregisterDevice(fcmToken: string): Promise<ApiResponse> {
 export function useNotifications() {
 
   const initRegisterFlow = useCallback(async () => {
-    // Check for permission
-    // code block 1
+    // Check for Notification permission
+    // Code block 1
+    const notificationsAllowed = await requestNotificationsPermission_android();
+
+    // If Notifications are not allowed
+    // then return
+    // unsuccessful exit block 1
+    if (!notificationsAllowed){
+      return Promise.reject(
+        new NotificationsRegistrationError("Notifications are blocked")
+      );
+    }
+
+    // Check for FCM permission
+    // code block 2
     var authStatus = await messaging().hasPermission();
     
-    // If permission was never requested
-    // then request permission
-    // code block 2
+    // If FCM permission was never requested
+    // then request FCM permission
+    // code block 3
     if (
       authStatus === messaging.AuthorizationStatus.NOT_DETERMINED || 
       authStatus === messaging.AuthorizationStatus.DENIED
@@ -116,20 +129,20 @@ export function useNotifications() {
 
     // if permission was requested and is blocked
     // then return
-    // unsuccessful exit block 1
+    // unsuccessful exit block 2
     if (authStatus === messaging.AuthorizationStatus.DENIED) {
       return Promise.reject(
-        new NotificationsRegistrationError("Notifications are blocked")
+        new NotificationsRegistrationError("FCM Permission denied")
       );
     }
 
     // get token from FCM
-    // code block 3
+    // code block 4
     const token = await messaging().getToken();
 
     // if no token was available or couldn't be generated
     // then return
-    // unsuccessful exit block 2
+    // unsuccessful exit block 3
     if (token == null) {
       return Promise.reject(
         new NotificationsRegistrationError("Couldn't get token from Firebase")
@@ -137,7 +150,7 @@ export function useNotifications() {
     }
 
     // Post registration request to api
-    // code block 4
+    // code block 5
     return registerDevice(token).catch(() => Promise.reject(
       new NotificationsRegistrationError("Couldn't register device on api")
     ));

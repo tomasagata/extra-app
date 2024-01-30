@@ -75,6 +75,23 @@ const AddInvestmentScreen = ({navigation, route}) => {
     navigation.goBack();
   };
 
+  const handleViewReturns = () => {
+    if(checkForErrors()){
+      Alert.alert("Validation error", "Please correct selected fields and try again.");
+      return;
+    }
+
+    navigation.navigate("investment-chart", {
+      investmentParams: {
+        downPaymentAmount: parseFloat(downPaymentAmount),
+        downPaymentTimestamp: downPaymentTimestamp.toISOString(),
+        depositAmount: parseFloat(depositAmount),
+        maxNumberOfDeposits: parseInt(maxNumberOfDeposits),
+        depositIntervalInDays: parseInt(depositIntervalInDays)
+      }
+    });
+  }
+
   const checkForErrors = () => {
     let nameErr = checkNameError();
     let downPaymentAmountErr = checkDownPaymentAmountError();
@@ -205,6 +222,10 @@ const AddInvestmentScreen = ({navigation, route}) => {
             setStartDateOpen(false);
           }}
         />
+
+        <TouchableOpacity style={styles.cancelButton} onPress={handleViewReturns}>
+          <Text style={styles.cancelButtonText}>View Investment Returns</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
           <Text style={styles.saveButtonText}>Create</Text>

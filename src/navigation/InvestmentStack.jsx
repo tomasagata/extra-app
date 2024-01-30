@@ -5,6 +5,7 @@ import NewCategoryScreen from '../screens/NewCategoryScreen';
 import InvestmentsScreen from '../screens/InvestmentsScreen';
 import AddInvestmentScreen from '../screens/AddInvestmentScreen';
 import InvestmentInfoScreen from '../screens/InvestmentInfoScreen';
+import InvestmentGraphsScreen from '../screens/InvestmentGraphsScreen';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,13 @@ const InvestmentStack = (props) => {
         component={NewCategoryScreen}
         options={{
           headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="investment-chart"
+        component={InvestmentGraphsScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
