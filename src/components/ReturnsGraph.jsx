@@ -54,14 +54,14 @@ const ReturnsGraph = ({investmentParams, yearly}) => {
 };
 
 const generateGraphData = (invParams) => {
-  const startDate = new Date(invParams.downPaymentTimestamp);
+  const downPaymentDate = new Date();
   const graphData = [{
-    month: startDate.getMonth() + 1,
-    year: startDate.getFullYear(),
+    month: downPaymentDate.getMonth() + 1,
+    year: downPaymentDate.getFullYear(),
     amount: invParams.downPaymentAmount * (-1)
   }];
 
-  let currentDate = startDate;
+  let currentDate = new Date(invParams.downPaymentTimestamp);
   let i;
   for(i = 0; i < invParams.maxNumberOfDeposits; i++){
     graphData.push({
