@@ -57,7 +57,7 @@ const AddExpenseScreen = ({navigation, route}) => {
     let newExpense = {
       concept,
       amount,
-      date: date.toISOString().substring(0, 10),
+      date,
       category: route.params.selectedCategory.name,
       iconId: route.params.selectedCategory.iconId
     };

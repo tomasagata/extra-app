@@ -44,8 +44,8 @@ function submitEditedExpense({budgetId, request}: {budgetId: string, request: Ex
 function getTransactionList({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<Expense[]> {
   const [, categories, from, until] = queryKey;
   // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
-  const iso_from_date = from ? from.toISOString().substring(0,10) : "";
-  const iso_until_date = until ? until.toISOString().substring(0,10) : "";
+  const iso_from_date = from ? from : "";
+  const iso_until_date = until ? until : "";
 
   // return getFromApi(`/getMyExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
   return postToApi("/getMyTransactions", {
@@ -64,8 +64,8 @@ function getTransactionList({ queryKey }: QueryFunctionContext<[string, string[]
 function getSumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<{category: Category, amount: string}[]> {
   const [, categories, from, until] = queryKey;
   // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
-  const iso_from_date = from ? from.toISOString().substring(0,10) : "";
-  const iso_until_date = until ? until.toISOString().substring(0,10) : "";
+  const iso_from_date = from ? from : "";
+  const iso_until_date = until ? until : "";
 
   // return getFromApi(`/getSumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
   return postToApi("/getSumOfExpenses", {
@@ -83,11 +83,28 @@ function getSumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?,
 function getYearlySumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<{year: string, amount: string}[]> {
   const [, categories, from, until] = queryKey;
   // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
-  const iso_from_date = from ? from.toISOString().substring(0,10) : "";
-  const iso_until_date = until ? until.toISOString().substring(0,10) : "";
+  const iso_from_date = from ? from : "";
+  const iso_until_date = until ? until : "";
 
   // return getFromApi(`/getYearlySumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
   return postToApi("/getYearlySumOfExpenses", {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      categories,
+      from: iso_from_date,
+      until: iso_until_date
+    })
+  });
+}
+
+function getYearlySumOfTransactions({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<{year: string, amount: string}[]> {
+  const [, categories, from, until] = queryKey;
+  const iso_from_date = from ? from : "";
+  const iso_until_date = until ? until : "";
+
+  return postToApi("/getYearlySumOfTransactions", {
     headers: {
       "Content-Type": "application/json"
     },
@@ -127,7 +144,7 @@ export function useExpenseCreationForm() {
       // Invalidate expense lists and reports
       queryClient.invalidateQueries({ queryKey: ['getExpenses'] })
       queryClient.invalidateQueries({ queryKey: ['getSumOfExpenses'] })
-      queryClient.invalidateQueries({ queryKey: ['getYearlySumOfExpenses'] })
+      queryClient.invalidateQueries({ queryKey: ['getYearlySumOfTransactions'] })
       // Invalidate category lists
       queryClient.invalidateQueries({ queryKey: ['getAllCategories'] })
       queryClient.invalidateQueries({ queryKey: ['getAllCategoriesWithIcons'] })
@@ -330,6 +347,33 @@ export function useYearlySumOfExpenses(request: { categories?: string[], from?: 
   const query = useQuery({ 
     queryKey: ['getYearlySumOfExpenses', request?.categories, request?.from, request?.until], 
     queryFn: getYearlySumOfExpenses,
+    retry: false
+  });
+
+  useEffect(() => {
+    if(query.error instanceof SessionExpiredError){
+      Alert.alert(
+        "Session Expired", 
+        query.error.message, 
+        [{text: "Return to Login", onPress: sessionExpired}]
+      );
+  
+    } else if(query.isError) {
+      Alert.alert(
+        "Error",
+        query.error.message
+      );
+    }
+  }, [query.error]);
+
+  return query;
+}
+
+export function useYearlySumOfTransactions(request: { categories?: string[], from?: Date, until?: Date }) {
+  const { sessionExpired } = useAuthentication();
+  const query = useQuery({ 
+    queryKey: ['getYearlySumOfTransactions', request?.categories, request?.from, request?.until], 
+    queryFn: getYearlySumOfTransactions,
     retry: false
   });
 

@@ -5,14 +5,14 @@ import { BarChart } from 'react-native-chart-kit';
 import { ListItem } from '@rneui/themed';
 
 import ScreenTemplate from '../components/ScreenTemplate';
-import { useYearlySumOfExpenses } from '../hooks/transactions';
+import { useYearlySumOfTransactions } from '../hooks/transactions';
 import FilterButton from '../components/Filter';
 
 
 const BarScreen = ({navigation, route}) => {
   const [filterData, setFilterData] = useState({});
 
-  const { isPending: loading, data: yearlyExpenses } = useYearlySumOfExpenses(filterData);
+  const { isPending: loading, data: yearlyTransactions } = useYearlySumOfTransactions(filterData);
 
   const chartConfig2 = {
     backgroundGradientFrom: "white",
@@ -53,12 +53,12 @@ const BarScreen = ({navigation, route}) => {
 
         <ScrollView style={styles.scrollviewContentContainer} horizontal={true}>
           <View style={{ paddingLeft: '5%', paddingBottom: '8%', paddingTop: '16%' }}>
-            {yearlyExpenses && yearlyExpenses.length ? (
+            {yearlyTransactions && yearlyTransactions.length ? (
               <>
                 <BarChart
                   data={{
-                    labels: yearlyExpenses.map(exp => "'" + exp.year.toString().slice(2)),
-                    datasets: [{ data: yearlyExpenses.map(exp => exp.amount) }],
+                    labels: yearlyTransactions.map(exp => "'" + exp.year.toString().slice(2)),
+                    datasets: [{ data: yearlyTransactions.map(exp => exp.amount) }],
                   }}
                   width={310}
                   height={230}
@@ -70,7 +70,7 @@ const BarScreen = ({navigation, route}) => {
                 />
                 <FlatList
                   style={{height: 200}}
-                  data={yearlyExpenses}
+                  data={yearlyTransactions}
                   renderItem={({ item }) => (
                     <ListItemComponent key={item.year} year={item.year} value={item.amount}/>
                   )}

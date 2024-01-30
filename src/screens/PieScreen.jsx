@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { Text, FlatList, StyleSheet } from 'react-native';
 import { PieChart } from "react-native-chart-kit";
-import { Avatar, Icon, ListItem } from '@rneui/themed';
+import { Avatar, ListItem } from '@rneui/themed';
 
 import { colorGradientSample } from '../utils/colors';
 import ScreenTemplate from '../components/ScreenTemplate';

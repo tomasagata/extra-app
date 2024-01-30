@@ -80,7 +80,9 @@ export function useInvestmentCreationForm() {
   const mutation = useMutation({
     mutationFn: submitInvestment,
     onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['getMyInvestments'] })
+      queryClient.invalidateQueries({ queryKey: ['getMyInvestments'] });
+      queryClient.invalidateQueries({ queryKey: ['getMyTransactions'] });
+      queryClient.invalidateQueries({ queryKey: ['getSumOfTransactions'] });
     },
     retry: false
   });
