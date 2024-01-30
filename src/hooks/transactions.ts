@@ -48,7 +48,7 @@ function getTransactionList({ queryKey }: QueryFunctionContext<[string, string[]
   const iso_until_date = until ? until.toISOString().substring(0,10) : "";
 
   // return getFromApi(`/getMyExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
-  return postToApi("/getMyExpenses", {
+  return postToApi("/getMyTransactions", {
     headers: {
       "Content-Type": "application/json"
     },

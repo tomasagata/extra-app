@@ -10,7 +10,7 @@ const DepositListItem = ({data}) => {
       <ListItem.Subtitle style={{ fontSize: 13 }} numberOfLines={1}>{data.category.name}</ListItem.Subtitle>
     </ListItem.Content>
     <ListItem.Content right>
-      <ListItem.Title right numberOfLines={1}>{data.amount}</ListItem.Title>
+      <ListItem.Title right numberOfLines={1} style={{color: 'green'}}>+{data.amount}</ListItem.Title>
       <ListItem.Subtitle style={{ fontSize: 12 }} right numberOfLines={1}>{data.date}</ListItem.Subtitle>
     </ListItem.Content>
   </ListItem>;
