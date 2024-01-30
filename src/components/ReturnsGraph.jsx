@@ -61,7 +61,7 @@ const generateGraphData = (invParams) => {
     amount: invParams.downPaymentAmount * (-1)
   }];
 
-  let currentDate = new Date(invParams.downPaymentTimestamp);
+  let currentDate = new Date(invParams.depositStartTimestamp);
   let i;
   for(i = 0; i < invParams.maxNumberOfDeposits; i++){
     graphData.push({

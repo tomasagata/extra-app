@@ -34,7 +34,7 @@ const iconFactory = (id) => {
 const AddInvestmentScreen = ({navigation, route}) => {
   const [name, setName] = React.useState("");
   const [downPaymentAmount, setDownPaymentAmount] = React.useState("");
-  const [downPaymentTimestamp, setDownPaymentTimestamp] = React.useState(new Date());
+  const [depositStartTimestamp, setDepositStartTimestamp] = React.useState(new Date());
   const [depositAmount, setDepositAmount] = React.useState("");
   const [maxNumberOfDeposits, setMaxNumberOfDeposits] = React.useState("");
   const [depositIntervalInDays, setDepositIntervalInDays] = React.useState("");
@@ -59,7 +59,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
     let newInvestment = {
       name, 
       downPaymentAmount,
-      downPaymentTimestamp: downPaymentTimestamp.toISOString(),
+      depositStartTimestamp: depositStartTimestamp.toISOString(),
       depositAmount,
       maxNumberOfDeposits,
       depositIntervalInDays,
@@ -84,7 +84,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
     navigation.navigate("investment-chart", {
       investmentParams: {
         downPaymentAmount: parseFloat(downPaymentAmount),
-        downPaymentTimestamp: downPaymentTimestamp.toISOString(),
+        depositStartTimestamp: depositStartTimestamp.toISOString(),
         depositAmount: parseFloat(depositAmount),
         maxNumberOfDeposits: parseInt(maxNumberOfDeposits),
         depositIntervalInDays: parseInt(depositIntervalInDays)
@@ -181,7 +181,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
 
         <Text>Starting time</Text>
         <AppInput.Time
-          value={downPaymentTimestamp}
+          value={depositStartTimestamp}
           onPress={() => setStartDateOpen(true)}
         />
 
@@ -213,10 +213,10 @@ const AddInvestmentScreen = ({navigation, route}) => {
           modal
           mode="datetime"
           open={startDateOpen}
-          date={downPaymentTimestamp}
+          date={depositStartTimestamp}
           onConfirm={(selectedDate) => {
             setStartDateOpen(false);
-            setDownPaymentTimestamp(selectedDate);
+            setDepositStartTimestamp(selectedDate);
           }}
           onCancel={() => {
             setStartDateOpen(false);
