@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, Text } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet } from 'react-native';
 
 import ScreenTemplate from '../components/ScreenTemplate';
 import { useDeleteExpense, useTransactionList } from '../hooks/transactions';
 import FilterButton from '../components/Filter';
 import ExpenseListItem from '../components/ExpenseListItem';
 import AddExpenseButton from '../components/AddExpenseButton';
+import DepositListItem from '../components/DepositListItem';
 
 
 const TableScreen = ({navigation, route}) => {
   const [ filterData, setFilterData ] = useState({});
 
-  const { isPending: isPendingExpenses, data: expenses, isRefetching, refetch } = useTransactionList(filterData);
+  const { isPending: isPendingExpenses, data: transactions, isRefetching, refetch } = useTransactionList(filterData);
   const { isPending: isPendingDelete, mutate: deleteExpense } = useDeleteExpense();
   const loading = isPendingExpenses || isPendingDelete;
 
@@ -43,13 +44,25 @@ const TableScreen = ({navigation, route}) => {
           }
         >
           
-          { expenses?.map((item, index) => (
-            <ExpenseListItem 
-              key={index}
-              data={item}
-              onEdit={handleEditExpense}
-              onDelete={deleteExpense}
-            />))
+          { transactions?.map((transaction, index) => {
+            if (transaction.type == 'expense') {
+              return (
+                <ExpenseListItem 
+                  key={index}
+                  data={transaction}
+                  onEdit={handleEditExpense}
+                  onDelete={deleteExpense}
+                />  
+              )
+            } else {
+              return (
+                <DepositListItem 
+                  key={index}
+                  data={transaction}
+                />
+              )
+            }
+            })
           }
 
         </ScrollView>

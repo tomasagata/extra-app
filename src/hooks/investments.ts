@@ -24,7 +24,7 @@ function getInvestmentList({ queryKey }: QueryFunctionContext<[string, string[]?
 }
 
 function submitInvestment(request: InvestmentAddingRequest): Promise<ApiResponse> {
-  return postToApi("/addBudget", {
+  return postToApi("/addInvestment", {
     credentials: "include",
     headers: {
       'Content-Type': "application/json"

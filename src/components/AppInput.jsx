@@ -199,6 +199,43 @@ const AmountInput = (props) => {
 };
 AppInput.Amount = AmountInput;
 
+const IntegerInput = (props) => {
+  return(
+    <Input 
+      value={props.value}
+      onChangeText={props.onChangeText}
+      placeholder={props.placeholder || '10'}
+      containerStyle={{
+        width: '100%',
+        paddingHorizontal: 0,
+      }}
+      inputContainerStyle={{
+        borderBottomColor: '#ccc',
+        borderBottomWidth: 1,
+        height: 35,
+      }}
+      inputStyle={{
+        fontSize: 15,
+      }}
+      leftIcon={
+        <MaterialIcons
+          name="build"
+          size={20}
+          color="#666"
+          style={{marginRight: 5}}
+        />
+      }
+      placeholderTextColor={"#c4c4c4"}
+      errorMessage={props.errorMessage}
+      maxLength={12}
+      onEndEditing={props.onEndEditing}
+      keyboardType="number-pad"
+    />
+  );
+};
+AppInput.Integer = IntegerInput;
+
+
 const DateInput = props => {
   return(
     <Input 
@@ -241,6 +278,51 @@ const DateInput = props => {
   );
 };
 AppInput.Date = DateInput;
+
+const TimeInput = props => {
+  // Localized to Argentina
+  // Subject to change
+
+  return(
+    <Input 
+      value={props.value.toLocaleString('es-AR', {timeZone: 'America/Argentina/Buenos_Aires'})}
+      onPressOut={props.onPress}
+      containerStyle={{
+        width: '100%',
+        paddingHorizontal: 0,
+      }}
+      inputContainerStyle={{
+        borderBottomColor: '#ccc',
+        borderBottomWidth: 1,
+        height: 35,
+      }}
+      inputStyle={{
+        fontSize: 15,
+      }}
+      leftIcon={
+        <MaterialIcons
+          name="access-time"
+          size={20}
+          color="#666"
+          style={{marginRight: 5}}
+        />
+      }
+      rightIcon={
+        <MaterialIcons
+          name="edit-calendar"
+          size={20}
+          color="#E86DC3"
+          style={{marginLeft: 5}}
+          onPress={props.onPress}
+        />
+      }
+      placeholderTextColor={"#c4c4c4"}
+      disabled={true}
+      keyboardType="decimal-pad"
+    />
+  );
+};
+AppInput.Time = TimeInput;
 
 const CategoryInput = props => {
   return(

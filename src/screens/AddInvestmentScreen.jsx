@@ -41,7 +41,10 @@ const AddInvestmentScreen = ({navigation, route}) => {
 
 
   const [nameHasError, setNameError] = React.useState(false);
-  const [amountHasError, setAmountError] = React.useState(false);
+  const [downPaymentAmountHasError, setDownPaymentAmountError] = React.useState(false);
+  const [depositAmountHasError, setDepositAmountError] = React.useState(false);
+  const [maxNumberOfDepositsHasError, setMaxNumberOfDepositsError] = React.useState(false);
+  const [depositIntervalInDaysHasError, setDepositIntervalInDaysError] = React.useState(false);
 
   const [startDateOpen, setStartDateOpen] = React.useState(false);
   
@@ -56,7 +59,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
     let newInvestment = {
       name, 
       downPaymentAmount,
-      downPaymentTimestamp,
+      downPaymentTimestamp: downPaymentTimestamp.toISOString(),
       depositAmount,
       maxNumberOfDeposits,
       depositIntervalInDays,
@@ -64,6 +67,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
       iconId: route.params.selectedCategory.iconId
     };
 
+    console.log(newInvestment);
     sendForm(newInvestment);
   };
 
@@ -73,8 +77,18 @@ const AddInvestmentScreen = ({navigation, route}) => {
 
   const checkForErrors = () => {
     let nameErr = checkNameError();
-    let amountErr = checkAmountError();
-    return nameErr || amountErr;
+    let downPaymentAmountErr = checkDownPaymentAmountError();
+    let depositAmountErr = checkDepositAmountError();
+    let numberDepositsErr = checkMaxNumberOfDepositsError();
+    let depositIntervalErr = checkDepositIntervalInDaysError();
+
+    return (
+      nameErr || 
+      downPaymentAmountErr || 
+      depositAmountErr || 
+      numberDepositsErr || 
+      depositIntervalErr
+    );
   };
 
   const checkNameError = () => {
@@ -84,10 +98,31 @@ const AddInvestmentScreen = ({navigation, route}) => {
     return !isValid;
   };
 
-  const checkAmountError = () => {
+  const checkDownPaymentAmountError = () => {
     let regex = /^[\d]{1,12}((\.)(\d){1,2})?$/;
     let isValid = regex.test(downPaymentAmount);
-    setAmountError(!isValid);
+    setDownPaymentAmountError(!isValid);
+    return !isValid;
+  };
+
+  const checkDepositAmountError = () => {
+    let regex = /^[\d]{1,12}((\.)(\d){1,2})?$/;
+    let isValid = regex.test(depositAmount);
+    setDepositAmountError(!isValid);
+    return !isValid;
+  };
+
+  const checkMaxNumberOfDepositsError = () => {
+    let regex = /^[\d]{1,9}$/;
+    let isValid = regex.test(maxNumberOfDeposits);
+    setMaxNumberOfDepositsError(!isValid);
+    return !isValid;
+  };
+
+  const checkDepositIntervalInDaysError = () => {
+    let regex = /^[\d]{1,9}$/;
+    let isValid = regex.test(depositIntervalInDays);
+    setDepositIntervalInDaysError(!isValid);
     return !isValid;
   };
 
@@ -123,12 +158,12 @@ const AddInvestmentScreen = ({navigation, route}) => {
         <AppInput.Amount
           value={downPaymentAmount}
           onChangeText={setDownPaymentAmount}
-          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
-          onEndEditing={checkAmountError}
+          errorMessage={downPaymentAmountHasError? "Amount must be positive and limited to cent precision" : null}
+          onEndEditing={checkDownPaymentAmountError}
         />
 
-        <Text>Starting date</Text>
-        <AppInput.Date
+        <Text>Starting time</Text>
+        <AppInput.Time
           value={downPaymentTimestamp}
           onPress={() => setStartDateOpen(true)}
         />
@@ -137,29 +172,29 @@ const AddInvestmentScreen = ({navigation, route}) => {
         <AppInput.Amount
           value={depositAmount}
           onChangeText={setDepositAmount}
-          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
-          onEndEditing={checkAmountError}
+          errorMessage={depositAmountHasError? "Amount must be positive and limited to cent precision" : null}
+          onEndEditing={checkDepositAmountError}
         />
 
         <Text>Number of deposits</Text>
-        <AppInput.Amount
+        <AppInput.Integer
           value={maxNumberOfDeposits}
           onChangeText={setMaxNumberOfDeposits}
-          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
-          onEndEditing={checkAmountError}
+          errorMessage={maxNumberOfDepositsHasError? "Number must be positive and integer" : null}
+          onEndEditing={checkMaxNumberOfDepositsError}
         />
 
         <Text>Deposit interval (days)</Text>
-        <AppInput.Amount
+        <AppInput.Integer
           value={depositIntervalInDays}
           onChangeText={setDepositIntervalInDays}
-          errorMessage={amountHasError? "Amount must be positive and limited to cent precision" : null}
-          onEndEditing={checkAmountError}
+          errorMessage={depositIntervalInDaysHasError? "Number must be positive and integer" : null}
+          onEndEditing={checkDepositIntervalInDaysError}
         />
 
         <DatePicker
           modal
-          mode="date"
+          mode="datetime"
           open={startDateOpen}
           date={downPaymentTimestamp}
           onConfirm={(selectedDate) => {

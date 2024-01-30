@@ -21,7 +21,7 @@ import NotificationsRegistrationError from "../errors/NotificationsRegistrationE
  * Checks and requests to use notifications if necessary.
  * @returns true if permissions were granted, false otherwise
  */
-async function areNotificationsAllowed(): Promise<boolean> {
+async function requestNotificationsPermission_android(): Promise<boolean> {
   let granted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
   if(granted){
@@ -47,11 +47,11 @@ async function areNotificationsAllowed(): Promise<boolean> {
 }
 
 async function onMessageHandler(message: FirebaseMessagingTypes.RemoteMessage) {
-  console.log("Message received: " + message);
+  console.log("Message received: " + JSON.stringify(message));
 }
 
 async function onNotificationOpenedAppHandler(message: FirebaseMessagingTypes.RemoteMessage) {
-  console.log("Message opened app: " + message);
+  console.log("Message opened app: " + JSON.stringify(message));
 }
 
 function registerDevice(fcmToken: string): Promise<ApiResponse> {
@@ -102,13 +102,16 @@ export function useNotifications() {
   const initRegisterFlow = useCallback(async () => {
     // Check for permission
     // code block 1
-    const authStatus = await messaging().hasPermission();
+    var authStatus = await messaging().hasPermission();
     
     // If permission was never requested
     // then request permission
     // code block 2
-    if (authStatus === messaging.AuthorizationStatus.NOT_DETERMINED) {
-      await messaging().requestPermission();
+    if (
+      authStatus === messaging.AuthorizationStatus.NOT_DETERMINED || 
+      authStatus === messaging.AuthorizationStatus.DENIED
+    ) {
+      authStatus = await messaging().requestPermission();
     }
 
     // if permission was requested and is blocked
@@ -166,7 +169,7 @@ export function useNotifications() {
     initRegisterFlow().then(() => {
       console.log("Notifications: registered successfully");
     }).catch((registerError: NotificationsRegistrationError) => {
-      areNotificationsAllowed();
+      requestNotificationsPermission_android();
       console.error(registerError);
     });
   }, [initRegisterFlow]);
