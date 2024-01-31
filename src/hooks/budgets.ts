@@ -17,11 +17,6 @@ import { useEffect } from "react";
 //  Fetch Queries
 //
 // ***********************************
-
-function getBudget({ queryKey }: QueryFunctionContext<[string, string]>): Promise<Budget> {
-  const [, budgetId] = queryKey;
-  return getFromApi(`/budget/${budgetId}`);
-};
   
 function getBudgetList({ queryKey }: QueryFunctionContext<[string]>): Promise<Budget[]> {
   return getFromApi("/allBudgets");
@@ -59,34 +54,6 @@ function getActiveBudgetByDateAndCategory({ queryKey }: QueryFunctionContext<[st
 //  Custom Hooks
 //
 // ***********************************
-
-export function useBudget(budgetId: string) {
-  const { sessionExpired } = useAuthentication();
-  const query = useQuery({ 
-    queryKey: ['getBudget', budgetId], 
-    queryFn: getBudget,
-    retry: false
-  });
-
-  useEffect(() => {
-    if(query.error instanceof SessionExpiredError){
-      Alert.alert(
-        "Session Expired", 
-        query.error.message, 
-        [{text: "Return to Login", onPress: sessionExpired}]
-      );
-
-    } else if(query.isError) {
-      Alert.alert(
-        "Error",
-        query.error.message
-      );
-    }
-  }, [query.error]);
-
-
-  return query;
-}
 
 export function useBudgetList() {
   const { sessionExpired } = useAuthentication();

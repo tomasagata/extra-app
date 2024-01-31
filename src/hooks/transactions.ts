@@ -1,5 +1,5 @@
 import { QueryFunctionContext, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteFromApi, getFromApi, postToApi } from "../utils/fetching";
+import { deleteFromApi, postToApi } from "../utils/fetching";
 import { Alert } from "react-native";
 import SessionExpiredError from "../errors/SessionExpiredError";
 import { useAuthentication } from "./authentication";
@@ -69,25 +69,6 @@ function getSumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?,
 
   // return getFromApi(`/getSumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
   return postToApi("/getSumOfExpenses", {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      categories,
-      from: iso_from_date,
-      until: iso_until_date
-    })
-  });
-}
-
-function getYearlySumOfExpenses({ queryKey }: QueryFunctionContext<[string, string[]?, Date?, Date?]>): Promise<{year: string, amount: string}[]> {
-  const [, categories, from, until] = queryKey;
-  // const comma_separated_categories = categories ? categories.map(c => c + ",") : "";
-  const iso_from_date = from ? from : "";
-  const iso_until_date = until ? until : "";
-
-  // return getFromApi(`/getYearlySumOfExpenses?categories=${comma_separated_categories}&from=${iso_from_date}&until=${iso_until_date}`);
-  return postToApi("/getYearlySumOfExpenses", {
     headers: {
       "Content-Type": "application/json"
     },
@@ -342,32 +323,6 @@ export function useSumOfExpenses(request: { categories?: string[], from?: Date, 
   return query;
 }
 
-export function useYearlySumOfExpenses(request: { categories?: string[], from?: Date, until?: Date }) {
-  const { sessionExpired } = useAuthentication();
-  const query = useQuery({ 
-    queryKey: ['getYearlySumOfExpenses', request?.categories, request?.from, request?.until], 
-    queryFn: getYearlySumOfExpenses,
-    retry: false
-  });
-
-  useEffect(() => {
-    if(query.error instanceof SessionExpiredError){
-      Alert.alert(
-        "Session Expired", 
-        query.error.message, 
-        [{text: "Return to Login", onPress: sessionExpired}]
-      );
-  
-    } else if(query.isError) {
-      Alert.alert(
-        "Error",
-        query.error.message
-      );
-    }
-  }, [query.error]);
-
-  return query;
-}
 
 export function useYearlySumOfTransactions(request: { categories?: string[], from?: Date, until?: Date }) {
   const { sessionExpired } = useAuthentication();
