@@ -90,7 +90,10 @@ export const AuthenticationProvider = ({ children }) => {
       }
     },
     signOut: async () => {
-      // First we call API to indicate that we are signing out,
+      // First deregister the user's device
+      deregister();
+
+      // Then we call API to indicate that we are signing out,
       // this way we can invalidate credentials from backend
       let apiStatusResponse = await doLogout();
 
@@ -98,7 +101,6 @@ export const AuthenticationProvider = ({ children }) => {
         case("2xx"):
           await AsyncStorage.removeItem("userCredentials");
           dispatch({ type: 'SIGN_OUT' });
-          deregister();
           break;
         case("4xx"):
           await AsyncStorage.removeItem("userCredentials");
@@ -112,7 +114,6 @@ export const AuthenticationProvider = ({ children }) => {
     sessionExpired: async () => {
       await AsyncStorage.removeItem("userCredentials");
       dispatch({ type: "SIGN_OUT" });
-      deregister();
     },
     ...state
   }), [state, register, deregister]);
