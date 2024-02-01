@@ -7,7 +7,24 @@
     "start:prod": "cross-env APP_ENV=prod react-native start --reset-cache",
     "start": "cross-env APP_ENV=dev react-native start --reset-cache",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+
+    "android:staging": "react-native run-android --mode=stagingdebug --appId com.extraapp.staging",
+    "android:staging-release": "react-native run-android --mode=stagingrelease --appId com.extraapp.staging",
+    "android:dev": "react-native run-android --mode=developmentdebug --appId com.extraapp.development",
+    "android:dev-release": "react-native run-android --mode=developmentrelease --appId com.extraapp.development",
+    "android:prod": "react-native run-android --mode=productiondebug --appId com.extraapp.production",
+    "android:prod-release": "react-native run-android --mode=productionrelease --appId com.extraapp.production",
+
+    "ba": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "ra": "rm -rf android/app/src/main/res/drawable-hdpi &&  rm -rf android/app/src/main/res/drawable-mdpi &&  rm -rf android/app/src/main/res/drawable-xhdpi && rm -rf android/app/src/main/res/drawable-xxhdpi && rm -rf android/app/src/main/res/drawable-xxxhdpi && rm -rf android/app/src/main/res/raw && npx jetify",
+    "androidProductionReleaseBundle": "cd android && ./gradlew bundleProductionRelease && killall -9 java && open ./android/app/build/outputs/bundle/production/release",
+    "androidDevelopmentDebugAPK": "cd android && ./gradlew assembleDevelopmentDebug && killall -9 java && open ./android/app/build/outputs/apk/development/debug",
+    "androidDevelopmentReleaseAPK": "cd android && ./gradlew assembleDevelopmentRelease && killall -9 java && open ./android/app/build/outputs/apk/development/release",
+    "androidProductionDebugAPK": "cd android && ./gradlew assembleProductionDebug && killall -9 java && open ./android/app/build/outputs/apk/production/debug",
+    "androidProductionReleaseAPK": "cd android && ./gradlew assembleProductionRelease && killall -9 java && open ./android/app/build/outputs/apk/production/release",
+    "androidStagingDebugAPK": "cd android && ./gradlew assembleStagingDebug && killall -9 java && open ./android/app/build/outputs/apk/staging/debug",
+    "androidStagingReleaseAPK": "cd android && ./gradlew assembleStagingRelease && killall -9 java && open ./android/app/build/outputs/apk/staging/release"
   },
   "dependencies": {
     "@notifee/react-native": "^7.8.2",
@@ -25,6 +42,7 @@
     "react": "18.2.0",
     "react-native": "0.72.0",
     "react-native-chart-kit": "^6.12.0",
+    "react-native-config": "^1.5.1",
     "react-native-date-picker": "^4.3.3",
     "react-native-dotenv": "^3.4.9",
     "react-native-gesture-handler": "^2.13.1",

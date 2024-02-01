@@ -1,4 +1,4 @@
-import { API_URL } from "@env";
+import Config from "react-native-config";
 import NetworkError from "../errors/NetworkError";
 import BadResponseError from "../errors/BadResponseError";
 import InternalServerError from "../errors/InternalServerError";
@@ -9,7 +9,7 @@ import AccessDeniedError from "../errors/AccessDeniedError";
 
 export async function getFromApi(resource: string, config: RequestInit = {}) {
   try {
-    var response = await fetch( API_URL + resource, {
+    var response = await fetch( Config.API_URL + resource, {
       method: 'GET',
       headers: {
         Accept: 'application/json'
@@ -54,7 +54,7 @@ export async function getFromApi(resource: string, config: RequestInit = {}) {
 
 export async function postToApi(resource: string, config: RequestInit = {}) {
   try {
-    var response = await fetch( API_URL + resource, {
+    var response = await fetch( Config.API_URL + resource, {
       method: 'POST',
       headers: {
         Accept: 'application/json'
@@ -104,7 +104,7 @@ export async function postToApi(resource: string, config: RequestInit = {}) {
 
 export async function deleteFromApi(resource: string, config: RequestInit = {}) {
   try {
-    var response = await fetch( API_URL + resource, {
+    var response = await fetch( Config.API_URL + resource, {
       method: 'DELETE' ,
       headers: {
         Accept: 'application/json'
