@@ -327,7 +327,7 @@ export function useSumOfExpenses(request: { categories?: string[], from?: Date, 
 export function useYearlySumOfTransactions(request: { categories?: string[], from?: Date, until?: Date }) {
   const { sessionExpired } = useAuthentication();
   const query = useQuery({ 
-    queryKey: ['getYearlySumOfTransactions', request?.categories, request?.from, request?.until], 
+    queryKey: ['getYearlySumOfExpenses', request?.categories, request?.from, request?.until], 
     queryFn: getYearlySumOfTransactions,
     retry: false
   });

@@ -81,8 +81,13 @@ export function useInvestmentCreationForm() {
     mutationFn: submitInvestment,
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ['getMyInvestments'] });
-      queryClient.invalidateQueries({ queryKey: ['getMyTransactions'] });
-      queryClient.invalidateQueries({ queryKey: ['getSumOfTransactions'] });
+      queryClient.invalidateQueries({ queryKey: ['getExpenses'] });
+      queryClient.invalidateQueries({ queryKey: ['getSumOfExpenses'] });
+      queryClient.invalidateQueries({ queryKey: ['getYearlySumOfExpenses'] });
+      queryClient.invalidateQueries({ queryKey: ['getAllCategories'] });
+      queryClient.invalidateQueries({ queryKey: ['getAllCategoriesWithIcons'] });
+      queryClient.invalidateQueries({ queryKey: ['getBudgets'] });
+      queryClient.invalidateQueries({ queryKey: ['getActiveBudgets'] });
     },
     retry: false
   });

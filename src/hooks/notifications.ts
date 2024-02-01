@@ -3,6 +3,7 @@ import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messag
 import { useCallback, useEffect, useState } from "react";
 import { postToApi } from "../utils/fetching";
 import NotificationsRegistrationError from "../errors/NotificationsRegistrationError";
+import notifee from '@notifee/react-native';
 
 
 
@@ -48,6 +49,27 @@ async function requestNotificationsPermission_android(): Promise<boolean> {
 
 async function onMessageHandler(message: FirebaseMessagingTypes.RemoteMessage) {
   console.log("Message received: " + JSON.stringify(message));
+
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
+  // Display a notification
+  await notifee.displayNotification({
+    title: message.notification?.title,
+    body: message.notification?.body,
+    android: {
+      channelId,
+      smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+      // pressAction is needed if you want the notification to open the app when pressed
+      pressAction: {
+        id: 'default',
+      },
+    },
+  });
+
 }
 
 async function onNotificationOpenedAppHandler(message: FirebaseMessagingTypes.RemoteMessage) {
