@@ -48,7 +48,7 @@ export async function getFromApi(resource: string, config: RequestInit = {}) {
   }
 
   if(response.status >= 400){
-    return Promise.reject(new Error());
+    return Promise.reject(new Error(body?.message));
   }
 }
 
@@ -97,7 +97,7 @@ export async function postToApi(resource: string, config: RequestInit = {}) {
   }
 
   if(response.status >= 400){
-    return Promise.reject(new Error());
+    return Promise.reject(new Error(body?.message));
   }
 
 }
@@ -143,6 +143,6 @@ export async function deleteFromApi(resource: string, config: RequestInit = {}) 
   }
 
   if(response.status >= 400){
-    return Promise.reject(new Error());
+    return Promise.reject(new Error(body?.message));
   }
 }
