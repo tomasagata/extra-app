@@ -5,10 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { doLogout, verifyCredentials, doSignIn } from "../utils/apiFetch";
 import { AuthContext } from "./AuthContext";
 import { useNotifications } from "../hooks/notifications";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export const AuthenticationProvider = ({ children }) => {
   const {register, deregister} = useNotifications();
+  const queryClient = useQueryClient();
 
   const [state, dispatch] = useReducer(
     (prevState, action) => {
@@ -78,6 +80,8 @@ export const AuthenticationProvider = ({ children }) => {
       switch(status){
         case("2xx"):
           await AsyncStorage.setItem("userCredentials", JSON.stringify(credentials));
+          await queryClient.invalidateQueries();
+          queryClient.clear();
           dispatch({ type: 'SIGN_IN', userCredentials: credentials });
           register();
           break;

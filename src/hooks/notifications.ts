@@ -66,7 +66,7 @@ function registerDevice(fcmToken: string): Promise<ApiResponse> {
 }
 
 function deregisterDevice(fcmToken: string): Promise<ApiResponse> {
-  return postToApi("/registerDevice", {
+  return postToApi("/unregisterDevice", {
     headers: {
       "Content-Type": "application/json"
     },
@@ -75,9 +75,6 @@ function deregisterDevice(fcmToken: string): Promise<ApiResponse> {
     })
   });
 }
-
-
-
 
 
 

@@ -35,6 +35,19 @@ const InvestmentInfoScreen = ({navigation, route}) => {
     navigation.goBack();
   };
 
+  const handleViewReturns = () => {
+
+    navigation.navigate("investment-chart", {
+      investmentParams: {
+        downPaymentAmount: parseFloat(route.params.selectedInvestment.downPaymentAmount),
+        depositStartTimestamp: new Date(route.params.selectedInvestment.depositStartTimestamp).toISOString(),
+        depositAmount: parseFloat(route.params.selectedInvestment.depositAmount),
+        maxNumberOfDeposits: parseInt(route.params.selectedInvestment.maxNumberOfDeposits),
+        depositIntervalInDays: parseInt(route.params.selectedInvestment.depositIntervalInDays)
+      }
+    });
+  }
+
   return (
     <ScreenTemplate >
 
@@ -61,7 +74,7 @@ const InvestmentInfoScreen = ({navigation, route}) => {
           <ListItem>
               <Icon name="arrow-expand-right" type="material-community" />
               <ListItem.Content>
-                  <ListItem.Title>{route.params.selectedInvestment.downPaymentTimestamp.toLocaleString()}</ListItem.Title>
+                  <ListItem.Title>{new Date(route.params.selectedInvestment.depositStartTimestamp).toLocaleString()}</ListItem.Title>
               </ListItem.Content>
           </ListItem>
 
@@ -85,7 +98,15 @@ const InvestmentInfoScreen = ({navigation, route}) => {
           <ListItem>
             <Icon name="credit" type="entypo" />
             <ListItem.Content>
-              <ListItem.Title>{route.params.selectedInvestment.depositIntervalInDays + " days"}</ListItem.Title>
+              <ListItem.Title>{route.params.selectedInvestment.depositIntervalInDays + " day(s)"}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+
+          <Text>Max number of deposits</Text>
+          <ListItem>
+            <Icon name="credit" type="entypo" />
+            <ListItem.Content>
+              <ListItem.Title>{route.params.selectedInvestment.maxNumberOfDeposits}</ListItem.Title>
             </ListItem.Content>
           </ListItem>
 
@@ -94,6 +115,22 @@ const InvestmentInfoScreen = ({navigation, route}) => {
             borderRadius: 5,
             padding: 10,
             alignItems: 'center',
+            marginTop: 20
+          }} 
+          onPress={handleViewReturns}>
+            <Text style={{
+              color: 'white',
+              fontSize: 16,
+              fontWeight: 'bold',
+            }}>View Investment Returns</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={{
+            backgroundColor: 'grey',
+            borderRadius: 5,
+            padding: 10,
+            alignItems: 'center',
+            marginTop: 10,
           }} onPress={handleBack}>
             <Text style={{
               color: 'white',

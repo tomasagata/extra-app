@@ -155,7 +155,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
           marginTop: 30,
         }}>Create Investment</Text>
 
-        <Text>Category</Text>
+        <Text style={{color: "#343434"}}>Category</Text>
         <ListItem containerStyle={{marginBottom: 20}}>
           <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
           <ListItem.Content>
@@ -163,15 +163,15 @@ const AddInvestmentScreen = ({navigation, route}) => {
           </ListItem.Content>
         </ListItem>
         
-        <Text>Name</Text>
-        <AppInput.Budget
+        <Text style={{color: "#343434"}}>Name</Text>
+        <AppInput.Investment
           value={name}
           onChangeText={setName}
           errorMessage={nameHasError? "Concept may only contain letters or numbers" : null}
           onEndEditing={checkNameError}
         />
 
-        <Text>Down Payment Amount</Text>
+        <Text style={{color: "#343434"}}>Down Payment Amount</Text>
         <AppInput.Amount
           value={downPaymentAmount}
           onChangeText={setDownPaymentAmount}
@@ -179,13 +179,13 @@ const AddInvestmentScreen = ({navigation, route}) => {
           onEndEditing={checkDownPaymentAmountError}
         />
 
-        <Text>Starting time</Text>
+        <Text style={{color: "#343434"}}>Starting time</Text>
         <AppInput.Time
           value={depositStartTimestamp}
           onPress={() => setStartDateOpen(true)}
         />
 
-        <Text>Deposit Amount</Text>
+        <Text style={{color: "#343434"}}>Deposit Amount</Text>
         <AppInput.Amount
           value={depositAmount}
           onChangeText={setDepositAmount}
@@ -193,7 +193,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
           onEndEditing={checkDepositAmountError}
         />
 
-        <Text>Number of deposits</Text>
+        <Text style={{color: "#343434"}}>Number of deposits</Text>
         <AppInput.Integer
           value={maxNumberOfDeposits}
           onChangeText={setMaxNumberOfDeposits}
@@ -201,7 +201,7 @@ const AddInvestmentScreen = ({navigation, route}) => {
           onEndEditing={checkMaxNumberOfDepositsError}
         />
 
-        <Text>Deposit interval (days)</Text>
+        <Text style={{color: "#343434"}}>Deposit interval (days)</Text>
         <AppInput.Integer
           value={depositIntervalInDays}
           onChangeText={setDepositIntervalInDays}

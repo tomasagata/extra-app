@@ -13,7 +13,8 @@ const Stack = createStackNavigator();
 const queryClient = new QueryClient();
 const linking = {
   prefixes: [
-    "extra://"
+    "extra://",
+    "http://extra"
   ],
   config: {
     screens: {
@@ -27,8 +28,8 @@ const App = () => {
   useNotificationHandler();
 
   return (
-    <AuthenticationProvider>
     <QueryClientProvider client={queryClient}>
+    <AuthenticationProvider>
     <SafeAreaProvider>
 
     <NavigationContainer linking={linking}>
@@ -49,8 +50,8 @@ const App = () => {
     </NavigationContainer>
 
     </SafeAreaProvider>
-    </QueryClientProvider>
     </AuthenticationProvider>
+    </QueryClientProvider>
   );
 };
 
