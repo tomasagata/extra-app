@@ -21,7 +21,7 @@ const NewCategoryScreen = ({navigation, route}) => {
 
     navigation.navigate(targetScreen, {
       selectedCategory: {
-        category: categoryName,
+        name: categoryName,
         iconId: custIcon.value
       },
       selectedItem: route.params?.selectedItem

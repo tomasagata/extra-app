@@ -5,7 +5,7 @@ import DatePicker from 'react-native-date-picker';
 
 import ScreenTemplate from '../components/ScreenTemplate';
 import { AppInput } from '../components/AppInput';
-import { postBudgetToApi } from '../utils/apiFetch';
+import { useBudgetCreationForm } from '../hooks/budgets';
 
 const iconFactory = (id) => {
   switch (id) {
@@ -30,28 +30,38 @@ const iconFactory = (id) => {
   }
 };
 
+
 const AddBudgetScreen = ({navigation, route}) => {
-  const [loading, setLoading] = React.useState(false);
   const [name, setName] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
-  const [startDateOpen, setStartDateOpen] = React.useState(false);
-  const [endDateOpen, setEndDateOpen] = React.useState(false);
+  
   const [nameHasError, setNameError] = React.useState(false);
   const [amountHasError, setAmountError] = React.useState(false);
+
+  const [startDateOpen, setStartDateOpen] = React.useState(false);
+  const [endDateOpen, setEndDateOpen] = React.useState(false);
+  
+  const { isPending: loading, mutate: sendForm } = useBudgetCreationForm();
+
 
   const handleSubmit = async () => {
     if(checkForErrors()){
       Alert.alert("Validation error", "Please correct selected fields and try again.");
       return;
     }
+    let newBudget = {
+      name, 
+      limitAmount: amount, 
+      // ...(route.params.selectedCategory), 
+      startingDate: startDate, 
+      limitDate: endDate,
+      category: route.params.selectedCategory.name,
+      iconId: route.params.selectedCategory.iconId
+    };
 
-    setLoading(true);
-    await postBudgetToApi({
-      name, limitAmount: amount, ...(route.params.selectedCategory), startingDate: startDate, limitDate: endDate
-    });
-    setLoading(false);
+    sendForm(newBudget);
   };
 
   const handleBack = async () => {
@@ -80,7 +90,7 @@ const AddBudgetScreen = ({navigation, route}) => {
 
   return (
     <ScreenTemplate loading={loading}>
-      <ScreenTemplate.Content style={{paddingHorizontal: 15}}>
+      <ScreenTemplate.Scrollable style={{paddingHorizontal: 15}}>
         <Text style={{
           fontFamily: 'Roboto-Medium',
           fontSize: 28,
@@ -94,7 +104,7 @@ const AddBudgetScreen = ({navigation, route}) => {
         <ListItem containerStyle={{marginBottom: 20}}>
           <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         
@@ -165,7 +175,7 @@ const AddBudgetScreen = ({navigation, route}) => {
           <Text style={styles.cancelButtonText}>Back</Text>
         </TouchableOpacity>
         
-      </ScreenTemplate.Content>
+      </ScreenTemplate.Scrollable>
 
     </ScreenTemplate>
   );

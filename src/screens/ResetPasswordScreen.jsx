@@ -1,26 +1,36 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, Alert, StyleSheet } from 'react-native';
-import { Dialog } from '@rneui/themed';
-import { TextInput, HelperText } from 'react-native-paper';
-import { postResetPasswordFormToApi } from '../utils/apiFetch';
+import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import ScreenTemplate from '../components/ScreenTemplate';
+import { usePasswordResetForm } from '../hooks/authentication';
+import { AppInput } from '../components/AppInput';
+import CustomButton from '../components/CustomButton';
+
 
 const ResetPasswordScreen = ({ navigation, route }) => {
   const [newPassword, setNewPassword] = React.useState("");
   const [newPasswordRepeat, setNewPasswordRepeat] = React.useState("");
-  const [hiddenPassword, setHiddenPassword] = React.useState(true);
-  const [passwordTooWeak, setPasswordTooWeak] = React.useState(true);
-  const [passwordsDoNotMatch, setPasswordsDoNotMatch] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [repeatPasswordError, setRepeatPasswordError] = React.useState(false);
+
+  const { isPending: loading, mutate: sendForm } = usePasswordResetForm();
+
 
   const navigateToLogin = () => {
-    navigation.navigate('Login');
+    navigation.navigate("drawer");
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    await postResetPasswordFormToApi(formHasErrors, {newPassword, newPasswordRepeat, token: route.params.token})
-    setLoading(false);
+  const handleSubmit = () => {
+    if( formHasErrors() ){
+      Alert.alert("Validation Error", "Please check selected fields and try again");
+      return;
+    }
+
+    sendForm({
+      newPassword,
+      newPasswordRepeat,
+      token: route.params.token
+    });
   };
 
 
@@ -31,58 +41,49 @@ const ResetPasswordScreen = ({ navigation, route }) => {
 
   const checkNewPasswordHasErrors = () => {
     let isWeak = ! newPassword.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?]{8,}$/);
-    setPasswordTooWeak(isWeak);
+    setPasswordError(isWeak);
     return isWeak;
   };
 
   const checkRepeatedPasswordDoesNotMatch = () => {
     let areDifferent = newPassword != newPasswordRepeat;
-    setPasswordsDoNotMatch(areDifferent);
+    setRepeatPasswordError(areDifferent);
     return areDifferent;
   };
 
   return (
     <ScreenTemplate loading={loading}>
-      <ScreenTemplate.Logo />
+      <ScreenTemplate.Logo hideNav />
 
-      <ScreenTemplate.Content>
-        <View style={styles.bottomContainer}></View>
+      <ScreenTemplate.Content style={{paddingHorizontal: 15}}>
+
+        <View style={styles.textTitleContainer}>
+          <Text style={styles.textTitle}>Change password:</Text>
+        </View>
 
         <View>
 
-          <TextInput
-            style={{ marginLeft: '10%', width: '80%', marginTop: '1%' }}
-            label="New password"
+          <AppInput.Secure
+            label="Write your new password"
             value={newPassword}
             onChangeText={setNewPassword}
-            onEndEditing={() => {checkNewPasswordHasErrors() && checkRepeatedPasswordDoesNotMatch()}}
-            secureTextEntry={hiddenPassword}
+            placeholder="New Password"
+            onEndEditing={() => (checkNewPasswordHasErrors() && checkRepeatedPasswordDoesNotMatch())}
+            errorMessage={passwordError? "Must contain: 8 letters, 1 number, 1 capital, and 1 symbol." : null}
           />
 
-          <HelperText type="error" visible={passwordTooWeak}>
-            Password must have at least 8 characters, one uppercase letter, one lowercase, one number and one of the following: @$!%*#?
-          </HelperText>
-
-          <TextInput
-            style={{ marginLeft: '10%', width: '80%', marginTop: '5%' }}
-            label="Repeat new password"
+          <AppInput.Secure
+            label="Write your new password again"
             value={newPasswordRepeat}
             onChangeText={setNewPasswordRepeat}
+            placeholder="New password"
             onEndEditing={checkRepeatedPasswordDoesNotMatch}
-            secureTextEntry={hiddenPassword}
+            errorMessage={repeatPasswordError? "Passwords do not match." : null}
           />
 
-          <HelperText type="error" visible={passwordsDoNotMatch}>
-            Passwords must match
-          </HelperText>
+          <CustomButton onPress={handleSubmit} label="Confirm" />
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Confirm</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={navigateToLogin}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
+          <CustomButton onPress={navigateToLogin} label="Cancel" style={{ backgroundColor: '#c4c4c4' }} />
         </View>
       </ScreenTemplate.Content>
     </ScreenTemplate>
@@ -90,6 +91,26 @@ const ResetPasswordScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+  
+  // Logo Container
+  
+  contentContainer: {
+    paddingBottom: 20,
+
+    backgroundColor: 'white', // Background color
+  },
+
+  textTitleContainer: {
+    marginBottom: '5%',
+    marginTop: 20,
+  },
+  
+  textTitle: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
 
   button: {
     backgroundColor: 'lightgray',

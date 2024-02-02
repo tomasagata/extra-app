@@ -5,9 +5,9 @@ import DatePicker from 'react-native-date-picker';
 
 import ScreenTemplate from '../components/ScreenTemplate';
 import { AppInput } from '../components/AppInput';
-import { postExpenseToApi, fetchActiveBudgetsByDateAndCategory } from '../utils/apiFetch';
 import BudgetFilledMeter from '../components/BudgetFilledMeter';
-import { AuthContext } from '../context/AuthContext';
+import { useActiveBudgetByDateAndCategory } from '../hooks/budgets';
+import { useExpenseCreationForm } from '../hooks/transactions';
 
 const iconFactory = (id) => {
   switch (id) {
@@ -32,17 +32,23 @@ const iconFactory = (id) => {
   }
 };
 
+
 const AddExpenseScreen = ({navigation, route}) => {
-  const [loading, setLoading] = React.useState(false);
   const [concept, setConcept] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [date, setDate] = React.useState(new Date());
+
   const [dateModalOpen, setDateModalOpen] = React.useState(false);
   const [conceptHasError, setConceptError] = React.useState(false);
   const [amountHasError, setAmountError] = React.useState(false);
-  const [activeBudget, setActiveBudget] = React.useState(null);
-  const {sessionExpired} = React.useContext(AuthContext);
+  
+  // if budget === null, that means there's no budget for selected date.
+  // if budget === undefined, that means it's still fetching from api.
+  const { isPending: isPendingActiveBudgets , data: activeBudget } = useActiveBudgetByDateAndCategory(date, route.params.selectedCategory);
+  const { isPending: isPendingForm , mutate: sendForm } = useExpenseCreationForm();
 
+  const loading = isPendingActiveBudgets || isPendingForm;
+  
   const handleSubmit = async () => {
     if(checkForErrors()){
       Alert.alert("Validation error", "Please correct selected fields and try again.");
@@ -51,14 +57,12 @@ const AddExpenseScreen = ({navigation, route}) => {
     let newExpense = {
       concept,
       amount,
-      date: date.toISOString().substring(0, 10),
-      category: route.params.selectedCategory.category,
+      date,
+      category: route.params.selectedCategory.name,
       iconId: route.params.selectedCategory.iconId
     };
 
-    setLoading(true);
-    await postExpenseToApi(newExpense, sessionExpired);
-    setLoading(false);
+    sendForm(newExpense);
   };
 
   const handleBack = async () => {
@@ -85,19 +89,9 @@ const AddExpenseScreen = ({navigation, route}) => {
     return !isValid;
   };
 
-  const handleFocus = async () => {
-    setLoading(true);
-    await fetchActiveBudgetsByDateAndCategory(date, route.params.selectedCategory.category, setActiveBudget);
-    setLoading(false);
-  };
-
-  React.useEffect(() => {
-    handleFocus();
-  }, [route, date]);
-
   return (
     <ScreenTemplate loading={loading}>
-      <ScreenTemplate.Content style={{paddingHorizontal: 15}}>
+      <ScreenTemplate.Scrollable style={{paddingHorizontal: 15}}>
         <Text style={{
           fontFamily: 'Roboto-Medium',
           fontSize: 28,
@@ -111,7 +105,7 @@ const AddExpenseScreen = ({navigation, route}) => {
         <ListItem containerStyle={{marginBottom: 20}}>
           <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         
@@ -169,7 +163,7 @@ const AddExpenseScreen = ({navigation, route}) => {
           <Text style={styles.cancelButtonText}>Back</Text>
         </TouchableOpacity>
         
-      </ScreenTemplate.Content>
+      </ScreenTemplate.Scrollable>
 
     </ScreenTemplate>
   );

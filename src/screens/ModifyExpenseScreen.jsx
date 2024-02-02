@@ -5,8 +5,9 @@ import DatePicker from 'react-native-date-picker';
 
 import ScreenTemplate from '../components/ScreenTemplate';
 import { AppInput } from '../components/AppInput';
-import { postEditExpenseToApi, fetchActiveBudgetsByDateAndCategory } from '../utils/apiFetch';
 import BudgetFilledMeter from '../components/BudgetFilledMeter';
+import { useEditExpenseForm } from '../hooks/transactions';
+import { useActiveBudgetByDateAndCategory } from '../hooks/budgets';
 
 const iconFactory = (id) => {
   switch (id) {
@@ -31,16 +32,19 @@ const iconFactory = (id) => {
   }
 };
 
+
 const ModifyExpenseScreen = ({navigation, route}) => {
-  const [loading, setLoading] = React.useState(false);
   const [concept, setConcept] = React.useState(route.params?.selectedItem?.concept || "");
   const [amount, setAmount] = React.useState(route.params?.selectedItem?.amount?.toString() || "");
   const [date, setDate] = React.useState(new Date(route.params?.selectedItem?.date) || new Date());
+
   const [dateModalOpen, setDateModalOpen] = React.useState(false);
   const [conceptHasError, setConceptError] = React.useState(false);
   const [amountHasError, setAmountError] = React.useState(false);
-  const [activeBudget, setActiveBudget] = React.useState(null);
-
+  
+  const { isPending: isPendingActiveBudgets, data: activeBudget } = useActiveBudgetByDateAndCategory(date, route.params.selectedCategory.category);
+  const { isPending: isPendingForm, mutate: sendForm } = useEditExpenseForm();
+  const loading = isPendingActiveBudgets || isPendingForm;
 
   const handleSubmit = async () => {
     if(checkForErrors()){
@@ -52,13 +56,11 @@ const ModifyExpenseScreen = ({navigation, route}) => {
       concept,
       amount,
       date: date.toISOString().substring(0, 10),
-      category: route.params.selectedCategory.category,
+      category: route.params.selectedCategory.category.name,
       iconId: route.params.selectedCategory.iconId
     };
 
-    setLoading(true);
-    await postEditExpenseToApi(newExpense);
-    setLoading(false);
+    sendForm(newExpense);
   };
 
   const handleBack = async () => {
@@ -85,16 +87,6 @@ const ModifyExpenseScreen = ({navigation, route}) => {
     return !isValid;
   };
 
-  const handleFocus = async () => {
-    setLoading(true);
-    await fetchActiveBudgetsByDateAndCategory(date, route.params.selectedCategory.category, setActiveBudget);
-    setLoading(false);
-  };
-
-  React.useEffect(() => {
-    handleFocus();
-  }, [route, date]);
-
   return (
     <ScreenTemplate loading={loading}>
       <ScreenTemplate.Content style={{paddingHorizontal: 15}}>
@@ -109,9 +101,9 @@ const ModifyExpenseScreen = ({navigation, route}) => {
 
         <Text>Category</Text>
         <ListItem containerStyle={{marginBottom: 20}}>
-          <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
+          <Icon name={iconFactory(route.params.selectedCategory.category.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.category.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         

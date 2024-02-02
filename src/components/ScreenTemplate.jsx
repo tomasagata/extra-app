@@ -4,6 +4,7 @@ import { useNavigation, DrawerActions  } from '@react-navigation/native';
 import { Dialog } from '@rneui/themed';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { ScrollView } from 'react-native';
 
 const ScreenTemplate = (props) => {
   return (
@@ -57,12 +58,14 @@ const ExtraLogo = (props) => {
           }}
           source={require('./../../img/logo.png')}
         />
-        <View style={{ position: 'absolute', left: -45, top: 10 }}>
-          <TouchableOpacity onPress={openDrawer} style={{ padding: 10 }}>
-            <Ionicons name="menu-outline" size={35} color={'black'} />
-          </TouchableOpacity>
-        </View>
+        {props.hideNav ? null : (
+          <View style={{ position: 'absolute', left: -45, top: 10 }}>
+            <TouchableOpacity onPress={openDrawer} style={{ padding: 10 }}>
+              <Ionicons name="menu-outline" size={35} color={'black'} />
+            </TouchableOpacity>
           </View>
+        )}
+      </View>
     
     </View>
   );
@@ -75,7 +78,17 @@ const Content = (props) => {
     </View>
   );
 };
+
+const ScrollableContent = (props) => {
+  return (
+    <ScrollView keyboardShouldPersistTaps="handled" style={props.style}>
+      {props.children}
+    </ScrollView>
+  );
+};
+
 ScreenTemplate.Logo = ExtraLogo;
 ScreenTemplate.Content = Content;
+ScreenTemplate.Scrollable = ScrollableContent;
 
 export default ScreenTemplate;

@@ -51,9 +51,9 @@ const BudgetInfoScreen = ({navigation, route}) => {
 
           <Text>Category</Text>
           <ListItem>
-              <Icon name={iconFactory(route.params.selectedBudget.iconId)} type="entypo" />
+              <Icon name={iconFactory(route.params.selectedBudget.category.iconId)} type="entypo" />
               <ListItem.Content>
-                  <ListItem.Title>{route.params.selectedBudget.category}</ListItem.Title>
+                  <ListItem.Title>{route.params.selectedBudget.category.name}</ListItem.Title>
               </ListItem.Content>
           </ListItem>
 
