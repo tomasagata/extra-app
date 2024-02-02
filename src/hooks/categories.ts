@@ -56,8 +56,17 @@ function addDefaultCategories(categories?: CategoryDTO[]) {
     return [...defaultCategories];
   }
 
-  const missingCategories = defaultCategories.filter(defaultCategory => !categories.includes(defaultCategory));
+  const missingCategories = defaultCategories.filter(defaultCategory => !categoryIsIncludedIn(defaultCategory, categories));
   return [...categories, ...missingCategories];
+}
+
+function categoryIsIncludedIn(category: CategoryDTO, categories: CategoryDTO[]) {
+  for(let cat of categories) {
+    if(cat.iconId == category.iconId && cat.name == category.name){
+      return true;
+    }
+  }
+  return false;
 }
 
 function addDefaultCategoryNames(categoryNames: string[]) {
