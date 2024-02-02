@@ -34,7 +34,7 @@ const PieScreen = ({navigation, route}) => {
 
   const renderItem = ({ item }) => (
     <ListItem  key={item.index} bottomDivider>
-      <Avatar rounded title='' containerStyle={{ backgroundColor: item.color }}/>
+      <Avatar rounded title='' source={{uri: 'https://'}} placeholderStyle={{ backgroundColor: 'transparent' }} containerStyle={{ backgroundColor: item.color }}/>
       <ListItem.Content >
         <ListItem.Title numberOfLines={1} style={{ fontSize: 18 }}>{item.category}</ListItem.Title>
       </ListItem.Content>

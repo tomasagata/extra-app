@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { doLogout, verifyCredentials, doSignIn } from "../utils/apiFetch";
 import { AuthContext } from "./AuthContext";
-import { useNotifications } from "../hooks/notifications";
+import { useNotificationHandler, useNotifications } from "../hooks/notifications";
 import { useQueryClient } from "@tanstack/react-query";
 
 
 export const AuthenticationProvider = ({ children }) => {
   const {register, deregister} = useNotifications();
+  useNotificationHandler();
   const queryClient = useQueryClient();
 
   const [state, dispatch] = useReducer(

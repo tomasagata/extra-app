@@ -1,11 +1,11 @@
 import { Alert } from "react-native";
 import { Buffer } from "buffer";
-import { API_URL } from "@env";
+import Config from "react-native-config";
 
 
 export async function doLogout() {
   try {
-    let response = await fetch( API_URL + "/logout", {
+    let response = await fetch( Config.API_URL + "/logout", {
       method: "POST",
       credentials: "include"
     });
@@ -34,7 +34,7 @@ export async function doLogout() {
 
 export async function verifyCredentials() {
   try{
-    let response = await fetch(API_URL + "/protected", {
+    let response = await fetch(Config.API_URL + "/protected", {
       method: "GET",
       credentials: "include",
     });
@@ -65,7 +65,7 @@ export async function doSignIn(request: any) {
   console.log(request);
 
   try {
-    let response = await fetch(API_URL + "/login", {
+    let response = await fetch(Config.API_URL + "/login", {
       method: 'POST',
       credentials: 'include',
       headers: {

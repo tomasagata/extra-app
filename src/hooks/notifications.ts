@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { postToApi } from "../utils/fetching";
 import NotificationsRegistrationError from "../errors/NotificationsRegistrationError";
 import notifee from '@notifee/react-native';
+import { useQueryClient } from "@tanstack/react-query";
 
 
 
@@ -73,7 +74,7 @@ async function onMessageHandler(message: FirebaseMessagingTypes.RemoteMessage) {
 }
 
 async function onNotificationOpenedAppHandler(message: FirebaseMessagingTypes.RemoteMessage) {
-  console.log("Message opened app: " + JSON.stringify(message));
+  console.log("Message opened app: " + JSON.stringify(message))
 }
 
 function registerDevice(fcmToken: string): Promise<ApiResponse> {
@@ -225,8 +226,10 @@ export function useNotifications() {
  * Should be used once in the App Component.
  */
 export function useNotificationHandler() {
+  const queryClient = useQueryClient();
+
   useEffect(() => {
-    const unsubscribeOnMessage = messaging().onMessage(onMessageHandler);
+    const unsubscribeOnMessage = messaging().onMessage(msg => (onMessageHandler(msg).then(() => queryClient.invalidateQueries())));
     const unsubscribeOnNotificationOpenedApp = messaging().onNotificationOpenedApp(onNotificationOpenedAppHandler);
 
     return () => {

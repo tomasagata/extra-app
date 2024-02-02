@@ -8,6 +8,7 @@ import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthenticationProvider } from './context/AuthenticationProvider';
 import { DrawerNavigation } from './navigation/DrawerNavigation';
 import { useNotificationHandler } from './hooks/notifications';
+import Config from 'react-native-config';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -23,9 +24,8 @@ const linking = {
   }
 }; 
 
-
+console.log(Config.ENV);
 const App = () => {
-  useNotificationHandler();
 
   return (
     <QueryClientProvider client={queryClient}>
