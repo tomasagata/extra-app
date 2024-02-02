@@ -136,7 +136,7 @@ const RegisterScreen = ({navigation}) => {
         <AppInput.Secure 
           value={password}
           onChangeText={setPassword}
-          errorMessage={passwordError? "Must contain: 8 letters, 1 number, 1 capital, and 1 symbol." : null}
+          errorMessage={passwordError? "Must contain: 8 letters, 1 number, 1 capital, and one of: @$!%*#?" : null}
         />
 
         <AppInput.Secure 
