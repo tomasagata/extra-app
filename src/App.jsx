@@ -26,7 +26,6 @@ const linking = {
 
 console.log(Config.ENV);
 const App = () => {
-  useNotificationHandler();
 
   return (
     <QueryClientProvider client={queryClient}>

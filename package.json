@@ -18,13 +18,13 @@
 
     "ba": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "ra": "rm -rf android/app/src/main/res/drawable-hdpi &&  rm -rf android/app/src/main/res/drawable-mdpi &&  rm -rf android/app/src/main/res/drawable-xhdpi && rm -rf android/app/src/main/res/drawable-xxhdpi && rm -rf android/app/src/main/res/drawable-xxxhdpi && rm -rf android/app/src/main/res/raw && npx jetify",
-    "androidProductionReleaseBundle": "cd android && ./gradlew bundleProductionRelease && killall -9 java && open ./android/app/build/outputs/bundle/production/release",
-    "androidDevelopmentDebugAPK": "cd android && ./gradlew assembleDevelopmentDebug && killall -9 java && open ./android/app/build/outputs/apk/development/debug",
-    "androidDevelopmentReleaseAPK": "cd android && ./gradlew assembleDevelopmentRelease && killall -9 java && open ./android/app/build/outputs/apk/development/release",
-    "androidProductionDebugAPK": "cd android && ./gradlew assembleProductionDebug && killall -9 java && open ./android/app/build/outputs/apk/production/debug",
-    "androidProductionReleaseAPK": "cd android && ./gradlew assembleProductionRelease && killall -9 java && open ./android/app/build/outputs/apk/production/release",
-    "androidStagingDebugAPK": "cd android && ./gradlew assembleStagingDebug && killall -9 java && open ./android/app/build/outputs/apk/staging/debug",
-    "androidStagingReleaseAPK": "cd android && ./gradlew assembleStagingRelease && killall -9 java && open ./android/app/build/outputs/apk/staging/release"
+    "androidProductionReleaseBundle": "cd android && ./gradlew bundleProductionRelease && killall -9 java && open ./app/build/outputs/bundle/production/release",
+    "androidDevelopmentDebugAPK": "cd android && ./gradlew assembleDevelopmentDebug && killall -9 java && open ./app/build/outputs/apk/development/debug",
+    "androidDevelopmentReleaseAPK": "cd android && ./gradlew assembleDevelopmentRelease && killall -9 java && open ./app/build/outputs/apk/development/release",
+    "androidProductionDebugAPK": "cd android && ./gradlew assembleProductionDebug && killall -9 java && open ./app/build/outputs/apk/production/debug",
+    "androidProductionReleaseAPK": "cd android && ./gradlew assembleProductionRelease && killall -9 java && open ./app/build/outputs/apk/production/release",
+    "androidStagingDebugAPK": "cd android && ./gradlew assembleStagingDebug && killall -9 java && open ./app/build/outputs/apk/staging/debug",
+    "androidStagingReleaseAPK": "cd android && ./gradlew assembleStagingRelease && killall -9 java && open ./app/build/outputs/apk/staging/release"
   },
   "dependencies": {
     "@notifee/react-native": "^7.8.2",

@@ -4,9 +4,10 @@ import { Alert } from "react-native";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
 
-import { getFromApi, postToApi } from "../utils/fetching";
+import { getFromApi, postToApi, postToApiButWithInvalidCredentialsCheck } from "../utils/fetching";
 import { AuthContext } from "../context/AuthContext";
 import SessionExpiredError from "../errors/SessionExpiredError";
+import BadCredentials from "../errors/BadCredentialsError";
 
 
 
@@ -53,7 +54,7 @@ function postForgottenPasswordForm(email: string): Promise<ApiResponse> {
 }
 
 function postPasswordResetForm(request: PasswordResetRequest): Promise<ApiResponse> {
-  return postToApi("/auth/forgotten/reset", {
+  return postToApiButWithInvalidCredentialsCheck("/auth/forgotten/reset", {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
@@ -73,7 +74,7 @@ function postRegistrationForm(request: UserRegistrationRequest): Promise<ApiResp
 }
 
 function postChangePasswordForm(request: UserChangePasswordRequest): Promise<ApiResponse> {
-  return postToApi("/auth/password/change", {
+  return postToApiButWithInvalidCredentialsCheck("/auth/password/change", {
     headers: {
       "Accept": "application/json",
       "Content-Type": "application/json"
@@ -140,18 +141,16 @@ export function useForgottenPasswordForm() {
 
 export function usePasswordResetForm() {
   const navigation = useNavigation();
-  const { sessionExpired } = useAuthentication();
   const mutation = useMutation({
     mutationFn: postPasswordResetForm,
     retry: false
   });
 
   useEffect(() => {
-    if(mutation.error instanceof SessionExpiredError){
+    if(mutation.error instanceof BadCredentials){
       Alert.alert(
-        "Session Expired", 
         mutation.error.message, 
-        [{text: "Return to Login", onPress: sessionExpired}]
+        "Reset token invalid or expired"
       );
   
     } else if(mutation.isError) {
@@ -216,18 +215,16 @@ export function useRegistrationForm() {
 
 export function useChangePasswordForm() {
   const navigation = useNavigation();
-  const { sessionExpired } = useAuthentication();
   const mutation = useMutation({
     mutationFn: postChangePasswordForm,
     retry: false
   });
 
   useEffect(() => {
-    if(mutation.error instanceof SessionExpiredError){
+    if(mutation.error instanceof BadCredentials){
       Alert.alert(
-        "Session Expired", 
         mutation.error.message, 
-        [{text: "Return to Login", onPress: sessionExpired}]
+        "Please correct your fields or reset your password"
       );
   
     } else if(mutation.isError) {
