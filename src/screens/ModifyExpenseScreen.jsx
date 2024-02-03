@@ -42,7 +42,7 @@ const ModifyExpenseScreen = ({navigation, route}) => {
   const [conceptHasError, setConceptError] = React.useState(false);
   const [amountHasError, setAmountError] = React.useState(false);
   
-  const { isPending: isPendingActiveBudgets, data: activeBudget } = useActiveBudgetByDateAndCategory(date, route.params.selectedCategory.category);
+  const { isPending: isPendingActiveBudgets, data: activeBudget } = useActiveBudgetByDateAndCategory(date, route.params.selectedCategory);
   const { isPending: isPendingForm, mutate: sendForm } = useEditExpenseForm();
   const loading = isPendingActiveBudgets || isPendingForm;
 
@@ -56,7 +56,7 @@ const ModifyExpenseScreen = ({navigation, route}) => {
       concept,
       amount,
       date: date.toISOString().substring(0, 10),
-      category: route.params.selectedCategory.category.name,
+      category: route.params.selectedCategory.name,
       iconId: route.params.selectedCategory.iconId
     };
 
@@ -101,9 +101,9 @@ const ModifyExpenseScreen = ({navigation, route}) => {
 
         <Text>Category</Text>
         <ListItem containerStyle={{marginBottom: 20}}>
-          <Icon name={iconFactory(route.params.selectedCategory.category.iconId)} type="entypo" />
+          <Icon name={iconFactory(route.params.selectedCategory.iconId)} type="entypo" />
           <ListItem.Content>
-            <ListItem.Title>{route.params.selectedCategory.category.name}</ListItem.Title>
+            <ListItem.Title>{route.params.selectedCategory.name}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
         
